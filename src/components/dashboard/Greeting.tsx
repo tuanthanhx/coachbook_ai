@@ -1,0 +1,23 @@
+import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Bell } from "lucide-react";
+
+const Greeting: React.FC = () => {
+  return (
+    <div className="flex justify-between items-center p-4">
+      <div className="flex items-center">
+        <Avatar className="mr-4 w-16 h-16">
+          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col">
+          <div>Hello</div>
+          <div className="font-bold text-xl">John Smith</div>
+        </div>
+      </div>
+      <Bell className="h-10 w-10 p-2 bg-white rounded-full text-gray-500 cursor-pointer" />
+    </div>
+  );
+};
+
+export default Greeting;
