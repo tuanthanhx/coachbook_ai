@@ -15,7 +15,7 @@ const Greeting: React.FC = () => {
           <div className="font-bold text-xl">John Smith</div>
         </div>
       </div>
-      <Bell className="h-10 w-10 p-2 bg-white rounded-full text-gray-500 cursor-pointer" />
+      <Bell className="h-10 w-10 p-2 bg-white rounded-full text-gray-700 cursor-pointer" />
     </div>
   );
 };

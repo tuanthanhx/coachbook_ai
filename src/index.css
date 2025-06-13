@@ -169,3 +169,11 @@ button {
     @apply bg-background text-foreground;
   }
 }
+
+.button-primary {
+  @apply h-11 bg-gradient-to-r from-[#2564ea] to-[#16a14b] text-white font-bold p-5;
+}
+
+.button {
+  @apply h-11 bg-secondary text-gray-700 border border-gray-300 font-bold p-5;
+}

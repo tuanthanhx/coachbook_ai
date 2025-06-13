@@ -1,8 +1,9 @@
 import Layout from '@/components/Layout';
-import Discover from '@/components/dashboard/Discover';
 import Greeting from '@/components/dashboard/Greeting';
 import Quote from '@/components/dashboard/Quote';
 import Statistics from '@/components/dashboard/Statistics';
+import Discover from '@/components/dashboard/Discover';
+import CurrentCoaches from '@/components/dashboard/CurrentCoaches';
 
 const Dashboard = () => {
   return (
@@ -11,6 +12,7 @@ const Dashboard = () => {
       <Quote />
       <Statistics />
       <Discover />
+      <CurrentCoaches />
     </Layout>
   );
 };
