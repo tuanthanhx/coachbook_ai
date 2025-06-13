@@ -4,6 +4,7 @@ import Quote from '@/components/dashboard/Quote';
 import Statistics from '@/components/dashboard/Statistics';
 import Discover from '@/components/dashboard/Discover';
 import CurrentCoaches from '@/components/dashboard/CurrentCoaches';
+import DailyInsights from '@/components/dashboard/DailyInsights';
 
 const Dashboard = () => {
   return (
@@ -13,6 +14,7 @@ const Dashboard = () => {
       <Statistics />
       <Discover />
       <CurrentCoaches />
+      <DailyInsights />
     </Layout>
   );
 };
