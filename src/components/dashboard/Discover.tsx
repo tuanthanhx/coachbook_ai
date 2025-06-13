@@ -22,7 +22,7 @@ const Discover: React.FC = () => {
         <p>Explore our extensive library of AI mentors and find the perfect coach for your journey.</p>
       </CardContent>
       <CardFooter className="mt-2">
-        <Button className="w-full rounded-full bg-white text-black hover:bg-gray-200 transition-colors duration-200">
+        <Button className="w-full rounded-full bg-white text-black font-bold hover:bg-gray-200 transition-colors duration-200">
           Browse Now
         </Button>
       </CardFooter>

@@ -4,7 +4,7 @@ import { Bell } from "lucide-react";
 
 const Greeting: React.FC = () => {
   return (
-    <div className="flex justify-between items-center p-4">
+    <div className="flex justify-between items-center py-4">
       <div className="flex items-center">
         <Avatar className="mr-4 w-16 h-16">
           <AvatarImage src="https://github.com/shadcn.png" />
