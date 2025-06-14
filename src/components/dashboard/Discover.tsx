@@ -7,7 +7,7 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 import { Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Discover: React.FC = () => {
   return (
@@ -22,9 +22,9 @@ const Discover: React.FC = () => {
         <p>Explore our extensive library of AI mentors and find the perfect coach for your journey.</p>
       </CardContent>
       <CardFooter className="mt-2">
-        <Button className="w-full rounded-full bg-white text-base text-black font-bold hover:bg-gray-200 transition-colors duration-200">
+        <Link to="/coaches" className="w-full h-11 flex items-center justify-center rounded-full bg-white text-base text-black font-bold hover:bg-gray-200 transition-colors duration-200">
           Browse Now
-        </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
