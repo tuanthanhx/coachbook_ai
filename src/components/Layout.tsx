@@ -1,10 +1,22 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
+import BottomNav from '@/components/layout/BottomNav';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
+
+  const excludedPaths = ['/login', '/register'];
+  const isExcludedDynamicRoute = location.pathname.startsWith('/chats/');
+
+  const shouldShowBottomNav = !excludedPaths.includes(location.pathname) && !isExcludedDynamicRoute;
+
   return (
-    <div className="pb-25">
-      {children}
-    </div>
+    <>
+      <div className="pb-25">
+        {children}
+      </div>
+      {shouldShowBottomNav && <BottomNav />}
+    </>
   );
 };
 

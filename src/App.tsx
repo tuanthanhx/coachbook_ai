@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import BottomNav from '@/components/layout/BottomNav';
 import Dashboard from '@/pages/Dashboard';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Coaches from '@/pages/Coaches';
 import CoachProfile from '@/pages/CoachProfile';
+import Chats from '@/pages/Chats';
+import ChatInterface from '@/pages/ChatInterface';
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/coaches" element={<Coaches />} />
           <Route path="/coaches/:id" element={<CoachProfile />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/chats/:id" element={<ChatInterface />} />
         </Routes>
-        <BottomNav />
       </Router>
     </>
   )
