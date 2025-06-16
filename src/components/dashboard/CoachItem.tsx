@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button } from '../ui/button';
+import { useNavigate } from "react-router-dom";
+import { Button } from '@/components/ui/button';
 
 interface CoachItemProps {
   image: string;
@@ -11,6 +12,7 @@ interface CoachItemProps {
 }
 
 const CoachItem: React.FC<CoachItemProps> = ({ image, title, author, description, tags, progress }) => {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
       <div className="flex">
@@ -39,10 +41,10 @@ const CoachItem: React.FC<CoachItemProps> = ({ image, title, author, description
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <Button className="w-full button-primary">
+        <Button className="w-full button-primary" onClick={() => navigate('/chats/1')}>
           Start Coaching
         </Button>
-        <Button className="w-full button">
+        <Button className="w-full button" onClick={() => navigate('/coaches/1')}>
           View Coach Profile
         </Button>
       </div>

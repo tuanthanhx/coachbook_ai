@@ -4,6 +4,7 @@ import Dashboard from '@/pages/Dashboard';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Coaches from '@/pages/Coaches';
+import CoachProfile from '@/pages/CoachProfile';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/coaches" element={<Coaches />} />
+          <Route path="/coaches/:id" element={<CoachProfile />} />
         </Routes>
         <BottomNav />
       </Router>
