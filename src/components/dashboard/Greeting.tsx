@@ -7,7 +7,7 @@ const Greeting: React.FC = () => {
     <div className="flex justify-between items-center py-4">
       <div className="flex items-center">
         <Avatar className="mr-4 w-16 h-16">
-          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarImage src="/assets/img/avatar.jpg" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">

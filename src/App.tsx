@@ -9,6 +9,7 @@ import ChatInterface from '@/pages/ChatInterface';
 import TodayInsights from '@/pages/TodayInsights';
 import Tracker from '@/pages/Tracker';
 import TrackerTasks from '@/pages/TrackerTasks';
+import Settings from '@/pages/Settings';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/insights" element={<TodayInsights />} />
           <Route path="/tracker" element={<Tracker />} />
           <Route path="/tracker/:id/tasks" element={<TrackerTasks />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </Router>
     </>
