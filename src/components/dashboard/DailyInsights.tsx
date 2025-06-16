@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { type CarouselApi } from "@/components/ui/carousel"
 import {
   Carousel,
@@ -9,6 +10,7 @@ import { Button } from '../ui/button';
 import { BookOpen, MoveLeft, MoveRight } from 'lucide-react';
 
 const DailyInsights: React.FC = () => {
+  const navigate = useNavigate();
   const [api, setApi] = React.useState<CarouselApi>();
   return (
     <div className="mt-5 py-8 px-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b] rounded-lg shadow-md text-white">
@@ -46,7 +48,7 @@ const DailyInsights: React.FC = () => {
           <MoveRight className="cursor-pointer" onClick={() => { api?.scrollNext() }} />
         </div>
       </Carousel>
-      <Button className="mt-5 w-full h-11 rounded-full bg-white text-gray-700 font-bold">View Full Insights</Button>
+      <Button className="mt-5 w-full h-11 rounded-full bg-white text-gray-700 font-bold" onClick={() => navigate('/insights')}>View Full Insights</Button>
     </div>
   );
 };
