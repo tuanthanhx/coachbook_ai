@@ -38,7 +38,7 @@ const Tracker = () => {
     <Layout>
       {/* Header */}
       <div className="flex items-center py-8 p-4 relative">
-        <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
+        <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate('/')} />
         <h1 className="px-8 w-full text-center text-xl font-bold">Action Tracker</h1>
       </div>
       {/* Cover */}

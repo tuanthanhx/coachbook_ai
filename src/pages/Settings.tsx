@@ -1,7 +1,8 @@
 import Layout from '@/components/Layout';
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Bell, ChevronLeft, ChevronRight, Globe, Moon, Lock, Shield, CreditCard, CircleHelp, Info, Star, Share2, LogOut } from 'lucide-react';
+import { Switch } from "@/components/ui/switch";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 
 const CoachProfile = () => {
@@ -11,7 +12,7 @@ const CoachProfile = () => {
     <Layout>
       {/* Header */}
       <div className="flex items-center py-8 p-4 relative">
-        <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
+        <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate('/')} />
         <h1 className="px-8 w-full text-center text-xl font-bold">Settings</h1>
       </div>
       <div className="bg-white rounded-lg shadow-md p-5 mb-5 flex gap-4 relative cursor-pointer">
@@ -26,6 +27,71 @@ const CoachProfile = () => {
           <p className="text-gray-500">johnsm@gmail.com</p>
         </div>
         <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
+      </div>
+      <h2 className="mb-4 font-bold text-lg">App Settings</h2>
+      <div className="mb-5 bg-white rounded-lg shadow-md">
+        <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
+          <Moon />
+          <span className="flex-1 text-gray-700">Dark mode</span>
+          <Switch />
+        </div>
+        <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
+          <Globe />
+          <span className="flex-1 text-gray-700">Language</span>
+          English
+        </div>
+        <div className="flex items-center justify-start gap-4 px-4 py-4">
+          <Bell />
+          <span className="flex-1 text-gray-700">Notification</span>
+          <ChevronRight className="text-gray-500 -mr-2" />
+        </div>
+      </div>
+      <h2 className="mb-4 font-bold text-lg">Account & Security</h2>
+      <div className="mb-5 bg-white rounded-lg shadow-md">
+        <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
+          <Lock />
+          <span className="flex-1 text-gray-700">Change Password</span>
+          <ChevronRight className="text-gray-500 -mr-2" />
+        </div>
+        <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
+          <Shield />
+          <span className="flex-1 text-gray-700">Privacy Settings</span>
+          <ChevronRight className="text-gray-500 -mr-2" />
+        </div>
+        <div className="flex items-center justify-start gap-4 px-4 py-4">
+          <CreditCard />
+          <span className="flex-1 text-gray-700">Manage Subscription</span>
+          <ChevronRight className="text-gray-500 -mr-2" />
+        </div>
+      </div>
+      <h2 className="mb-4 font-bold text-lg">Support & More</h2>
+      <div className="mb-5 bg-white rounded-lg shadow-md">
+        <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
+          <CircleHelp />
+          <span className="flex-1 text-gray-700">Help Center</span>
+          <ChevronRight className="text-gray-500 -mr-2" />
+        </div>
+        <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
+          <Info />
+          <span className="flex-1 text-gray-700">Contact Support</span>
+          <ChevronRight className="text-gray-500 -mr-2" />
+        </div>
+        <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
+          <Star />
+          <span className="flex-1 text-gray-700">Rate App</span>
+          <ChevronRight className="text-gray-500 -mr-2" />
+        </div>
+        <div className="flex items-center justify-start gap-4 px-4 py-4">
+          <Share2 />
+          <span className="flex-1 text-gray-700">Share with Friends</span>
+          <ChevronRight className="text-gray-500 -mr-2" />
+        </div>
+      </div>
+      <div className="bg-white rounded-lg shadow-md">
+        <div className="flex items-center justify-start gap-4 px-4 py-4">
+          <LogOut className="text-red-500" />
+          <span className="flex-1 text-red-500">Sign Out</span>
+        </div>
       </div>
     </Layout>
   );
