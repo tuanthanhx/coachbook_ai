@@ -67,21 +67,21 @@ const Settings = () => {
       </div>
       <h2 className="mb-4 font-bold text-lg">Account & Security</h2>
       <div className="mb-5 bg-white rounded-lg shadow-md">
-        <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
+        <Link className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200" to="/settings/password">
           <Lock />
           <span className="flex-1 text-gray-700">Change Password</span>
           <ChevronRight className="text-gray-500 -mr-2" />
-        </div>
+        </Link>
         <div className="flex items-center justify-start gap-4 px-4 py-4 border-b border-gray-200">
           <Shield />
           <span className="flex-1 text-gray-700">Privacy Settings</span>
           <ChevronRight className="text-gray-500 -mr-2" />
         </div>
-        <div className="flex items-center justify-start gap-4 px-4 py-4">
+        <Link className="flex items-center justify-start gap-4 px-4 py-4" to="/settings/subscription">
           <CreditCard />
           <span className="flex-1 text-gray-700">Manage Subscription</span>
           <ChevronRight className="text-gray-500 -mr-2" />
-        </div>
+        </Link>
       </div>
       <h2 className="mb-4 font-bold text-lg">Support & More</h2>
       <div className="mb-5 bg-white rounded-lg shadow-md">

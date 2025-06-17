@@ -12,6 +12,8 @@ import TrackerTasks from '@/pages/TrackerTasks';
 import Settings from '@/pages/Settings';
 import Profile from '@/pages/settings/Profile';
 import Notification from '@/pages/settings/Notification';
+import Password from '@/pages/settings/Password';
+import Subscription from '@/pages/settings/Subscription';
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings/profile" element={<Profile />} />
           <Route path="/settings/notification" element={<Notification />} />
+          <Route path="/settings/password" element={<Password />} />
+          <Route path="/settings/subscription" element={<Subscription />} />
         </Routes>
       </Router>
     </>
