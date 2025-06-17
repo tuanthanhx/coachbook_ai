@@ -10,6 +10,8 @@ import TodayInsights from '@/pages/TodayInsights';
 import Tracker from '@/pages/Tracker';
 import TrackerTasks from '@/pages/TrackerTasks';
 import Settings from '@/pages/Settings';
+import Profile from '@/pages/settings/Profile';
+import Notification from '@/pages/settings/Notification';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/tracker" element={<Tracker />} />
           <Route path="/tracker/:id/tasks" element={<TrackerTasks />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/profile" element={<Profile />} />
+          <Route path="/settings/notification" element={<Notification />} />
         </Routes>
       </Router>
     </>
