@@ -58,4 +58,13 @@ export const updateProfile = async (formData: FormData) => {
   }
 };
 
+export const updatePassword = async (currentPassword: string, newPassword: string) => {
+  try {
+    const response = await apiService.patch('/users/password', { currentPassword, newPassword });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 export default apiService;

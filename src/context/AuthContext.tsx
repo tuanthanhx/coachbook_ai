@@ -42,7 +42,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      await apiService.post('/auth/logout');
+      await apiService.post('/auth/logout', {
+        refreshToken: localStorage.getItem('refreshToken'),
+      });
       clearTokens();
     } catch (error) {
       console.error('Error during logout:', error);
