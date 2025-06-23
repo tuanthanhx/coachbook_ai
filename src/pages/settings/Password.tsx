@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/LayoutDefault';
 import { ChevronLeft } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from "@/components/ui/button"

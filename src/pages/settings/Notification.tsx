@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/LayoutDefault';
 import { Bell, ChevronLeft } from 'lucide-react';
 import { Switch } from "@/components/ui/switch";
 import {

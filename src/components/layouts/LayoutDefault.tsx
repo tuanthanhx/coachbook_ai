@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import BottomNav from '@/components/layout/BottomNav';
+import BottomNav from '@/components/layouts/BottomNav';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();

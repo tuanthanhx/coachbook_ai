@@ -1,4 +1,4 @@
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/LayoutDefault';
 import { Link, useNavigate } from "react-router-dom";
 import { Bell, ChevronLeft, ChevronRight, Globe, Moon, Lock, Shield, CreditCard, CircleHelp, Info, Star, Share2, LogOut } from 'lucide-react';
 import { Switch } from "@/components/ui/switch";

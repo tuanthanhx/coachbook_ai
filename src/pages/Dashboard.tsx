@@ -1,4 +1,4 @@
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/LayoutDefault';
 import Greeting from '@/components/dashboard/Greeting';
 import Quote from '@/components/dashboard/Quote';
 import Statistics from '@/components/dashboard/Statistics';

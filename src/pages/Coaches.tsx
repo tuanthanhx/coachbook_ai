@@ -1,4 +1,4 @@
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/LayoutDefault';
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from 'lucide-react';
 import CoachItem from '@/components/dashboard/CoachItem';

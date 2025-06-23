@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/LayoutDefault';
 import { ChevronLeft, ChevronDownIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
