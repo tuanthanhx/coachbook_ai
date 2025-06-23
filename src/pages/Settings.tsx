@@ -14,15 +14,19 @@ import { useAuth } from '@/context/AuthContext';
 
 
 const Settings = () => {
-  const { clearTokens } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleSignOut = () => {
-    // Use AuthContext to clear tokens
-    clearTokens();
+  const handleSignOut = async () => {
+    try {
+      // Call API to remove refreshToken from the DB using AuthContext
+      await logout();
 
-    // Redirect to login page
-    navigate('/login');
+      // Redirect to login page
+      navigate('/login');
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    }
   };
 
   return (

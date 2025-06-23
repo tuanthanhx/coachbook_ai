@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000'; // Replace with your backend URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 const apiService = axios.create({
   baseURL: API_BASE_URL,
@@ -12,6 +12,9 @@ const apiService = axios.create({
 export const login = async (email: string, password: string) => {
   try {
     const response = await apiService.post('/auth/login', { email, password });
+
+    console.log(import.meta.env.VITE_API_BASE_URL);
+
     return response.data;
   } catch (error) {
     const err = error as any;
