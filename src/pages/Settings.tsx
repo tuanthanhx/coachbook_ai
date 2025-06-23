@@ -15,6 +15,15 @@ import {
 const Settings = () => {
   const navigate = useNavigate();
 
+  const handleSignOut = () => {
+    // Clear tokens from localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+
+    // Redirect to login page
+    navigate('/login');
+  };
+
   return (
     <Layout>
       {/* Header */}
@@ -107,7 +116,10 @@ const Settings = () => {
         </div>
       </div>
       <div className="bg-white rounded-lg shadow-md">
-        <div className="flex items-center justify-start gap-4 px-4 py-4">
+        <div
+          className="flex items-center justify-start gap-4 px-4 py-4 cursor-pointer"
+          onClick={handleSignOut}
+        >
           <LogOut className="text-red-500" />
           <span className="flex-1 text-red-500">Sign Out</span>
         </div>
