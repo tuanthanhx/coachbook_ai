@@ -2,7 +2,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Layout from '@/components/layouts/LayoutDefault';
-import { ChevronLeft, ChevronDownIcon } from 'lucide-react';
+import { ChevronLeft, ChevronDownIcon, Pencil } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Select,
@@ -88,9 +88,9 @@ const Profile = () => {
         </Avatar>
         <label
           htmlFor="avatar-upload"
-          className="absolute bottom-0 right-0 bg-gray-800 text-white text-sm px-2 py-1 rounded cursor-pointer"
+          className="flex justify-center items-center absolute bottom-0 right-4 bg-gray-800 text-white text-sm w-8 h-8 rounded-full cursor-pointer"
         >
-          Change
+          <Pencil className="w-5 h-5" />
         </label>
         <input
           id="avatar-upload"
