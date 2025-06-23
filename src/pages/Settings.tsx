@@ -14,8 +14,10 @@ import { useAuth } from '@/context/AuthContext';
 
 
 const Settings = () => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
+
+  console.log('User in Settings:', user);
 
   const handleSignOut = async () => {
     try {
@@ -39,13 +41,13 @@ const Settings = () => {
       <Link className="bg-white rounded-lg shadow-md p-5 mb-5 flex gap-4 relative cursor-pointer" to="/settings/profile">
         <div className="flex-shrink-0">
           <Avatar className="w-16 h-16">
-            <AvatarImage src="/assets/img/avatar.jpg" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src={user?.avatar || '/assets/img/avatar.jpg'} />
+            <AvatarFallback>{user?.name?.charAt(0) || 'CN'}</AvatarFallback>
           </Avatar>
         </div>
         <div className="flex flex-col justify-center">
-          <h2 className="text-lg font-semibold">John Smith</h2>
-          <p className="text-gray-500">johnsm@gmail.com</p>
+          { user?.fullname && <h2 className="text-lg font-semibold">{user.fullname}</h2>}
+          { user?.email && <p className="text-gray-500">{user.email}</p> }
         </div>
         <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
       </Link>

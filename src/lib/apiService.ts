@@ -9,6 +9,21 @@ const apiService = axios.create({
   },
 });
 
+apiService.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token && !config.url?.includes('/auth')) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+const handleApiError = (error: any) => {
+  const err = error as any;
+  throw err.response?.data?.message || err.response?.data || err.message;
+};
+
 export const login = async (email: string, password: string) => {
   try {
     const response = await apiService.post('/auth/login', { email, password });
@@ -17,8 +32,7 @@ export const login = async (email: string, password: string) => {
 
     return response.data;
   } catch (error) {
-    const err = error as any;
-    throw err.response?.data?.message || err.response?.data || err.message;
+    handleApiError(error);
   }
 };
 
@@ -27,8 +41,16 @@ export const register = async (email: string, password: string) => {
     const response = await apiService.post('/auth/register', { email, password });
     return response.data;
   } catch (error) {
-    const err = error as any;
-    throw err.response?.data?.message || err.response?.data || err.message;
+    handleApiError(error);
+  }
+};
+
+export const updateProfile = async (updateData: { fullname?: string; country?: string; dob?: Date }) => {
+  try {
+    const response = await apiService.patch('/users/profile', updateData);
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
   }
 };
 

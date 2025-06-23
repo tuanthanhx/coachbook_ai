@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Layout from '@/components/layouts/LayoutDefault';
 import { ChevronLeft, ChevronDownIcon } from 'lucide-react';
@@ -18,18 +19,50 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { updateProfile } from '@/lib/apiService';
+import { toast } from "sonner";
 
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false)
-  const [date, setDate] = useState<Date | undefined>(undefined)
+  const { user, setUser } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [fullname, setFullname] = useState('');
+  const [country, setCountry] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      setFullname(user.fullname || '');
+      setCountry(user.country || '');
+      setDate(user.dob ? new Date(user.dob) : undefined);
+    }
+  }, [user]);
+
+  const handleSaveChanges = async () => {
+    try {
+      const updateData = {
+        fullname,
+        country,
+        dob: date,
+      };
+      const updatedUser = await updateProfile(updateData);
+      setUser(updatedUser);
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile.');
+    }
+  };
 
   return (
     <Layout>
       {/* Header */}
       <div className="flex items-center py-8 p-4 relative">
-        <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate('/settings')} />
+        <ChevronLeft
+          className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer"
+          onClick={() => navigate('/settings')}
+        />
         <h1 className="px-8 w-full text-center text-xl font-bold">Edit Profile</h1>
       </div>
       <div className="mb-5 flex items-center justify-center">
@@ -40,11 +73,19 @@ const Profile = () => {
       </div>
       <div className="mb-5 py-6 px-4 bg-white rounded-lg shadow-md">
         <h3 className="mb-2 font-bold">Full Name</h3>
-        <Input className="h-11 rounded-full px-4" value="John Smith" />
+        <Input
+          className="h-11 rounded-full px-4"
+          value={fullname}
+          onChange={(e) => setFullname(e.target.value)}
+        />
         <h3 className="mt-6 mb-2 font-bold">Email</h3>
-        <Input className="h-11 rounded-full px-4" value="johnsm@gmail.com" />
+        <Input
+          className="h-11 rounded-full px-4"
+          value={user?.email || ''}
+          disabled
+        />
         <h3 className="mt-6 mb-2 font-bold">Country/Nationality</h3>
-        <Select>
+        <Select value={country} onValueChange={setCountry}>
           <SelectTrigger className="w-full !h-11 rounded-full px-4">
             <SelectValue placeholder="Select country" />
           </SelectTrigger>
@@ -84,13 +125,15 @@ const Profile = () => {
               selected={date}
               captionLayout="dropdown"
               onSelect={(date) => {
-                setDate(date)
-                setOpen(false)
+                setDate(date);
+                setOpen(false);
               }}
             />
           </PopoverContent>
         </Popover>
-        <Button className="button-primary w-full mt-8">Save Changes</Button>
+        <Button className="button-primary w-full mt-8" onClick={handleSaveChanges}>
+          Save Changes
+        </Button>
       </div>
     </Layout>
   );
