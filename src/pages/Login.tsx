@@ -1,15 +1,16 @@
 import LayoutSimple from '@/components/layouts/LayoutSimple';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from "sonner";
 import { useState } from 'react';
 import { login } from '@/lib/apiService';
+import { useAuth } from '@/context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const { fetchUserProfile, storeTokens } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,12 +18,14 @@ const Login = () => {
       const response = await login(email, password);
       console.log('Login successful:', response);
 
-      // Store tokens securely
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('refreshToken', response.refreshToken);
+      // Use AuthContext to store tokens
+      storeTokens(response.token, response.refreshToken);
+
+      // Fetch user profile
+      await fetchUserProfile();
 
       // Redirect to dashboard
-      navigate('/');
+      window.location.href = '/';
     } catch (err) {
       toast.error(err instanceof Error ? err.message : String(err));
     }

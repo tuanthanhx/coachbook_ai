@@ -5,8 +5,13 @@ import Statistics from '@/components/dashboard/Statistics';
 import Discover from '@/components/dashboard/Discover';
 import CurrentCoaches from '@/components/dashboard/CurrentCoaches';
 import DailyInsights from '@/components/dashboard/DailyInsights';
+import { useAuth } from '@/context/AuthContext';
 
 const Dashboard = () => {
+  const { user } = useAuth();
+
+  console.log('User profile:', user);
+
   return (
     <Layout>
       <Greeting />

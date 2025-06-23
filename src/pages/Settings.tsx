@@ -10,15 +10,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useAuth } from '@/context/AuthContext';
 
 
 const Settings = () => {
+  const { clearTokens } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    // Clear tokens from localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
+    // Use AuthContext to clear tokens
+    clearTokens();
 
     // Redirect to login page
     navigate('/login');

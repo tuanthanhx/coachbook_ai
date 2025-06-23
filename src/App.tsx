@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from '@/context/AuthContext';
 import Dashboard from '@/pages/Dashboard';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
@@ -18,7 +19,7 @@ import PrivateRoute from '@/components/PrivateRoute';
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
@@ -38,7 +39,7 @@ function App() {
           <Route path="/settings/subscription" element={<PrivateRoute><Subscription /></PrivateRoute>} />
         </Routes>
       </Router>
-    </>
+    </AuthProvider>
   );
 }
 

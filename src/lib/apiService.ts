@@ -19,4 +19,14 @@ export const login = async (email: string, password: string) => {
   }
 };
 
+export const register = async (email: string, password: string) => {
+  try {
+    const response = await apiService.post('/auth/register', { email, password });
+    return response.data;
+  } catch (error) {
+    const err = error as any;
+    throw err.response?.data?.message || err.response?.data || err.message;
+  }
+};
+
 export default apiService;
