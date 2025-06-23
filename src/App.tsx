@@ -14,31 +14,32 @@ import Profile from '@/pages/settings/Profile';
 import Notification from '@/pages/settings/Notification';
 import Password from '@/pages/settings/Password';
 import Subscription from '@/pages/settings/Subscription';
+import PrivateRoute from '@/components/PrivateRoute';
 
 function App() {
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/coaches" element={<Coaches />} />
-          <Route path="/coaches/:id" element={<CoachProfile />} />
-          <Route path="/chats" element={<Chats />} />
-          <Route path="/chats/:id" element={<ChatInterface />} />
-          <Route path="/insights" element={<TodayInsights />} />
-          <Route path="/tracker" element={<Tracker />} />
-          <Route path="/tracker/:id/tasks" element={<TrackerTasks />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/settings/profile" element={<Profile />} />
-          <Route path="/settings/notification" element={<Notification />} />
-          <Route path="/settings/password" element={<Password />} />
-          <Route path="/settings/subscription" element={<Subscription />} />
+          <Route path="/coaches" element={<PrivateRoute><Coaches /></PrivateRoute>} />
+          <Route path="/coaches/:id" element={<PrivateRoute><CoachProfile /></PrivateRoute>} />
+          <Route path="/chats" element={<PrivateRoute><Chats /></PrivateRoute>} />
+          <Route path="/chats/:id" element={<PrivateRoute><ChatInterface /></PrivateRoute>} />
+          <Route path="/insights" element={<PrivateRoute><TodayInsights /></PrivateRoute>} />
+          <Route path="/tracker" element={<PrivateRoute><Tracker /></PrivateRoute>} />
+          <Route path="/tracker/:id/tasks" element={<PrivateRoute><TrackerTasks /></PrivateRoute>} />
+          <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
+          <Route path="/settings/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/settings/notification" element={<PrivateRoute><Notification /></PrivateRoute>} />
+          <Route path="/settings/password" element={<PrivateRoute><Password /></PrivateRoute>} />
+          <Route path="/settings/subscription" element={<PrivateRoute><Subscription /></PrivateRoute>} />
         </Routes>
       </Router>
     </>
-  )
+  );
 }
 
 export default App

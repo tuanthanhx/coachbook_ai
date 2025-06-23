@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { Toaster } from "@/components/ui/sonner";
 import BottomNav from '@/components/layouts/BottomNav';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -15,6 +16,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div className="pb-25">
         {children}
       </div>
+      <Toaster richColors closeButton position="top-center" />
       {shouldShowBottomNav && <BottomNav />}
     </>
   );
