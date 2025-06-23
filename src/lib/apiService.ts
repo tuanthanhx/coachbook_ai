@@ -45,9 +45,13 @@ export const register = async (email: string, password: string) => {
   }
 };
 
-export const updateProfile = async (updateData: { fullname?: string; country?: string; dob?: Date }) => {
+export const updateProfile = async (formData: FormData) => {
   try {
-    const response = await apiService.patch('/users/profile', updateData);
+    const response = await apiService.patch('/users/profile', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   } catch (error) {
     handleApiError(error);

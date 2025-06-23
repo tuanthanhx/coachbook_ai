@@ -30,6 +30,8 @@ const Profile = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [fullname, setFullname] = useState('');
   const [country, setCountry] = useState('');
+  const [avatar, setAvatar] = useState<File | null>(null);
+  const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -39,14 +41,28 @@ const Profile = () => {
     }
   }, [user]);
 
+  const handleAvatarChange = (file: File | null) => {
+    setAvatar(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setPreviewAvatar(e.target?.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewAvatar(null);
+    }
+  };
+
   const handleSaveChanges = async () => {
     try {
-      const updateData = {
-        fullname,
-        country,
-        dob: date,
-      };
-      const updatedUser = await updateProfile(updateData);
+      const formData = new FormData();
+      formData.append('fullname', fullname);
+      formData.append('country', country);
+      formData.append('dob', date ? date.toISOString() : '');
+      if (avatar) {
+        formData.append('avatar', avatar);
+      }
+
+      const updatedUser = await updateProfile(formData);
       setUser(updatedUser);
       toast.success('Profile updated successfully!');
     } catch (error) {
@@ -65,11 +81,24 @@ const Profile = () => {
         />
         <h1 className="px-8 w-full text-center text-xl font-bold">Edit Profile</h1>
       </div>
-      <div className="mb-5 flex items-center justify-center">
+      <div className="mb-5 flex items-center justify-center relative">
         <Avatar className="w-24 h-24">
-          <AvatarImage src="/assets/img/avatar.jpg" />
+          <AvatarImage src={previewAvatar || user?.avatar || '/assets/img/avatar.jpg'} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
+        <label
+          htmlFor="avatar-upload"
+          className="absolute bottom-0 right-0 bg-gray-800 text-white text-sm px-2 py-1 rounded cursor-pointer"
+        >
+          Change
+        </label>
+        <input
+          id="avatar-upload"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => handleAvatarChange(e.target.files?.[0] || null)}
+        />
       </div>
       <div className="mb-5 py-6 px-4 bg-white rounded-lg shadow-md">
         <h3 className="mb-2 font-bold">Full Name</h3>
