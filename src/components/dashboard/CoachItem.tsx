@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 
 interface CoachItemProps {
-  image: string;
+  imageUrl: string;
   title: string;
   author: string;
   description: string;
@@ -11,13 +11,13 @@ interface CoachItemProps {
   progress: number;
 }
 
-const CoachItem: React.FC<CoachItemProps> = ({ image, title, author, description, tags, progress }) => {
+const CoachItem: React.FC<CoachItemProps> = ({ imageUrl, title, author, description, tags, progress }) => {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
       <div className="flex">
         <div className="w-16 mr-4">
-          <img className="block w-full rounded-lg shadow-md" src={image} alt={title} />
+          <img className="block w-full rounded-lg shadow-md" src={imageUrl} alt={title} />
         </div>
         <div className="flex-1">
           <h3 className="text-lg font-bold">{title}</h3>
