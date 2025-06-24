@@ -8,6 +8,7 @@ import apiService from '@/lib/apiService';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface Chat {
+  id: string;
   image: string;
   title: string;
   message: string;
@@ -24,6 +25,7 @@ const Chats = () => {
       try {
         const response = await apiService.get('/books/following');
         const formattedChats: Chat[] = response.data.map((book: any) => ({
+          id: book._id,
           image: book.imageUrl || '/assets/img/book_001.png',
           title: book.title,
           message: `Chat with ${book.title} Coach`,
@@ -72,7 +74,7 @@ const Chats = () => {
       {/* Chats List */}
       <div className="flex flex-col gap-8">
         {filteredChats.map((chat, index) => (
-          <div key={index} className="flex justify-between items-center gap-4 cursor-pointer" onClick={() => navigate(`/chats/${index + 1}`)}>
+          <div key={index} className="flex justify-between items-center gap-4 cursor-pointer" onClick={() => navigate(`/chats/${chat.id}`)}>
             <Avatar className="w-16 h-16">
               <AvatarImage src={chat.image} alt={chat.title} />
               <AvatarFallback>{chat.title.charAt(0)}</AvatarFallback>
