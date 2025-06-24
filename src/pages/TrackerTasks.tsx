@@ -1,10 +1,64 @@
 import Layout from '@/components/layouts/LayoutDefault';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, CircleCheckBig } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState, useRef } from 'react';
+import apiService from '@/lib/apiService';
+import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+
+interface Task {
+  _id: string;
+  title: string;
+  description: string;
+  instruction: string;
+  isCompleted: boolean;
+}
 
 const Tracker = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [selectedTaskInstruction, setSelectedTaskInstruction] = useState<string | null>(null);
+  const recentlyCompletedTaskRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await apiService.get<Task[]>(`/books/${id}/tasks`);
+        setTasks(response.data);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  const handleMarkAsComplete = async (taskId: string) => {
+    try {
+      await apiService.post(`/books/${id}/tasks/${taskId}/complete`);
+      setTasks(prevTasks => prevTasks.map(task =>
+        task._id === taskId ? { ...task, isCompleted: true } : task
+      ));
+      recentlyCompletedTaskRef.current = taskId;
+      toast.success('Task marked as complete!');
+
+      setTimeout(() => {
+        recentlyCompletedTaskRef.current = null;
+        setTasks(prevTasks => [...prevTasks]);
+      }, 3000);
+    } catch (error) {
+      console.error('Error marking task as complete:', error);
+      toast.error('Failed to mark task as complete.');
+    }
+  };
 
   return (
     <Layout>
@@ -33,45 +87,49 @@ const Tracker = () => {
           <div className="bg-black h-2 rounded-full" style={{ width: '50%' }}></div>
         </div>
       </div>
+
       {/* List of Tasks */}
-      <div className="bg-white rounded-lg shadow-md p-5 mb-5">
-        <h2 className="flex items-center font-bold mb-2">
-          <CircleCheckBig className="w-7 h-7 mr-2 text-blue-500" />
-          <span className="flex-1">Identify Your Habit Triggers</span>
-        </h2>
-        <p className="text-gray-600">Analyze your daily routine to discover the cues that lead to your current habits</p>
-      </div>
-      <div className="bg-white rounded-lg shadow-md p-5 mb-5">
-        <h2 className="flex items-center font-bold mb-2">
-          <CircleCheckBig className="w-7 h-7 mr-2 text-blue-500" />
-          <span className="flex-1">Design Your Environment for Success</span>
-        </h2>
-        <p className="text-gray-600">Restructure your workspace and living areas to support your new productivity habits</p>
-      </div>
-      <div className="bg-white rounded-lg shadow-md p-5 mb-5">
-        <h2 className="font-bold mb-2">Apply the 2-Minute Rule</h2>
-        <p className="text-gray-600">Start with tiny versions of your habits to build consistency before intensity</p>
-        <div className="flex flex-col gap-4 mt-4">
-          <Button className="w-full button" onClick={() => navigate('/chats/1')}>
-            Ask Coach
-          </Button>
-          <Button className="w-full button-primary">
-            Mark as Complete
-          </Button>
+      {tasks.map((task, index) => (
+        <div
+          key={index}
+          className={`rounded-lg shadow-md p-5 mb-5 ${recentlyCompletedTaskRef.current === task._id ? 'bg-blue-100' : 'bg-white'}`}
+          onClick={() => setSelectedTaskInstruction(task.instruction)}
+        >
+          <h2 className="flex items-center font-bold mb-2">
+            {task.isCompleted && <CircleCheckBig className="w-7 h-7 mr-2 text-blue-500" />}
+            <span className="flex-1">{task.title}</span>
+          </h2>
+          <p className="text-gray-600">{task.description}</p>
+          {!task.isCompleted && (
+            <div className="flex flex-col gap-4 mt-4">
+              <Button className="w-full button" onClick={(e) => {
+                e.stopPropagation();
+                navigate('/chats/1');
+              }}>
+                Ask Coach
+              </Button>
+              <Button className="w-full button-primary" onClick={(e) => {
+                e.stopPropagation();
+                handleMarkAsComplete(task._id);
+              }}>
+                Mark as Complete
+              </Button>
+            </div>
+          )}
         </div>
-      </div>
-      <div className="bg-white rounded-lg shadow-md p-5 mb-5">
-        <h2 className="font-bold mb-2">Create Your Habit Tracking System</h2>
-        <p className="text-gray-600">Set up a simple but effective method to monitor your progress and stay motivated</p>
-        <div className="flex flex-col gap-4 mt-4">
-          <Button className="w-full button" onClick={() => navigate('/chats/1')}>
-            Ask Coach
-          </Button>
-          <Button className="w-full button-primary">
-            Mark as Complete
-          </Button>
-        </div>
-      </div>
+      ))}
+
+      {/* Task Instruction Dialog */}
+      <Dialog open={!!selectedTaskInstruction} onOpenChange={() => setSelectedTaskInstruction(null)}>
+        <DialogContent className="w-[calc(100%-2rem)] max-w-[390px] py-6 px-4">
+          <DialogHeader>
+            <DialogTitle className="mb-2">Task Instruction</DialogTitle>
+            <DialogDescription className="text-base text-left">
+              {selectedTaskInstruction}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };
