@@ -13,6 +13,7 @@ type Coach = {
   description: string;
   tags: string[];
   progress: number;
+  isSubscribed?: boolean;
 };
 
 const Coaches = () => {
@@ -115,6 +116,7 @@ const Coaches = () => {
             description={coach.description}
             tags={coach.tags}
             progress={coach.progress || 0}
+            isSubscribed={coach.isSubscribed || false}
           />
         ))}
       </div>
