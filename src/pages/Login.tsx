@@ -16,7 +16,6 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await login(email, password);
-      console.log('Login successful:', response);
 
       // Use AuthContext to store tokens
       storeTokens(response.token, response.refreshToken);

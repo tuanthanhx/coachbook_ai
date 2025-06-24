@@ -85,11 +85,15 @@ const Coaches = () => {
             onChange={(e) => setSelectedTag(e.target.value)}
           >
             <option value="">All Tags</option>
-            <option value="Fitness">Fitness</option>
-            <option value="Nutrition">Nutrition</option>
-            <option value="Mindfulness">Mindfulness</option>
-            <option value="Career">Career</option>
-            <option value="Life Coaching">Life Coaching</option>
+            <option value="habits">Habits</option>
+            <option value="self-improvement">Self Improvement</option>
+            <option value="productivity">Productivity</option>
+            <option value="mindfulness">Mindfulness</option>
+            <option value="spirituality">Spirituality</option>
+            <option value="self-awareness">Self Awareness</option>
+            <option value="leadership">Leadership</option>
+            <option value="effectiveness">Effectiveness</option>
+            <option value="personal growth">Personal Growth</option>
           </select>
           <select className="w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="">Sort by</option>

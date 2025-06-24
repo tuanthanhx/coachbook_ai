@@ -13,10 +13,10 @@ const Dashboard = () => {
     <Layout>
       <Greeting user={{ avatar: user?.avatar, fullname: user?.fullname }} />
       <Quote />
-      <Statistics statistics={{chatsCount: user?.chatsCount, coachesCount: user?.coachesCount}} />
+      <Statistics statistics={{ chatsCount: user?.chatsCount, coachesCount: user?.coachesCount }} />
       <Discover />
       <CurrentCoaches />
-      <DailyInsights />
+      {user?.coachesCount > 0 && <DailyInsights />}
     </Layout>
   );
 };
