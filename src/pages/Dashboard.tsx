@@ -16,7 +16,7 @@ const Dashboard = () => {
       <Statistics statistics={{ chatsCount: user?.chatsCount, coachesCount: user?.coachesCount }} />
       <Discover />
       <CurrentCoaches />
-      {user?.coachesCount > 0 && <DailyInsights />}
+      <DailyInsights />
     </Layout>
   );
 };

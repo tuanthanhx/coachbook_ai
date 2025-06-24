@@ -49,31 +49,35 @@ const DailyInsights: React.FC = () => {
         {/* icon book */}
         <BookOpen />
       </div>
-      <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
-        <CarouselContent>
-          {insights.map(insight => (
-            <CarouselItem key={insight._id}>
-              <div className="w-full">
-                <h3 className="text-lg font-bold">{insight.title}</h3>
-                <div className="mb-5 text-sm text-gray-200">{insight.bookTitle} • {insight.bookAuthor}</div>
-                <p>{insight.content}</p>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <div className="flex justify-between items-center mt-4">
-          <MoveLeft className="cursor-pointer" onClick={() => { api?.scrollPrev() }} />
-          <div className="flex gap-2">
-            {[...Array(api?.scrollSnapList().length || 0)].map((_, index) => (
-              <div
-                key={index}
-                className={`w-2 h-2 rounded-full ${index === selectedIndex ? 'bg-green-500' : 'bg-gray-300'}`}
-              />
+      {insights.length > 0 ? (
+        <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
+          <CarouselContent>
+            {insights.map(insight => (
+              <CarouselItem key={insight._id}>
+                <div className="w-full">
+                  <h3 className="text-lg font-bold">{insight.title}</h3>
+                  <div className="mb-5 text-sm text-gray-200">{insight.bookTitle} • {insight.bookAuthor}</div>
+                  <p>{insight.content}</p>
+                </div>
+              </CarouselItem>
             ))}
+          </CarouselContent>
+          <div className="flex justify-between items-center mt-4">
+            <MoveLeft className="cursor-pointer" onClick={() => { api?.scrollPrev() }} />
+            <div className="flex gap-2">
+              {[...Array(api?.scrollSnapList().length || 0)].map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full ${index === selectedIndex ? 'bg-green-500' : 'bg-gray-300'}`}
+                />
+              ))}
+            </div>
+            <MoveRight className="cursor-pointer" onClick={() => { api?.scrollNext() }} />
           </div>
-          <MoveRight className="cursor-pointer" onClick={() => { api?.scrollNext() }} />
-        </div>
-      </Carousel>
+        </Carousel>
+      ) : (
+        <div className="text-center text-gray-200">No insights available for today.</div>
+      )}
       <Button className="mt-5 w-full h-11 rounded-full bg-white text-gray-700 font-bold" onClick={() => navigate('/insights')}>View Full Insights</Button>
     </div>
   );

@@ -1,7 +1,7 @@
 import Layout from '@/components/layouts/LayoutDefault';
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { getBookById } from '@/lib/apiService';
 
@@ -95,14 +95,14 @@ const CoachProfile = () => {
         </div>
       </div> */}
       {/* Buttons */}
-      <div className="flex flex-col gap-4">
+      {/* <div className="flex flex-col gap-4">
         <Button className="w-full button-primary" onClick={() => navigate(`/chats/${book?._id}`)}>
           Start Coaching
         </Button>
-        {/* <Button className="w-full button" onClick={() => navigate('/insights/completed')}>
+        <Button className="w-full button" onClick={() => navigate('/insights/completed')}>
           View Completed Insights
-        </Button> */}
-      </div>
+        </Button>
+      </div> */}
     </Layout>
   );
 };
