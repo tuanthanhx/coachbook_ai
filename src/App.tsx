@@ -9,6 +9,7 @@ import CoachProfile from '@/pages/CoachProfile';
 import Chats from '@/pages/Chats';
 import ChatInterface from '@/pages/ChatInterface';
 import TodayInsights from '@/pages/TodayInsights';
+import CompletedInsights from '@/pages/CompletedInsights';
 import Tracker from '@/pages/Tracker';
 import TrackerTasks from '@/pages/TrackerTasks';
 import Settings from '@/pages/Settings';
@@ -32,6 +33,7 @@ function App() {
             <Route path="/chats" element={<PrivateRoute><Chats /></PrivateRoute>} />
             <Route path="/chats/:id" element={<PrivateRoute><ChatInterface /></PrivateRoute>} />
             <Route path="/insights" element={<PrivateRoute><TodayInsights /></PrivateRoute>} />
+            <Route path="/completed-insights" element={<PrivateRoute><CompletedInsights /></PrivateRoute>} />
             <Route path="/tracker" element={<PrivateRoute><Tracker /></PrivateRoute>} />
             <Route path="/tracker/:id/tasks" element={<PrivateRoute><TrackerTasks /></PrivateRoute>} />
             <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />

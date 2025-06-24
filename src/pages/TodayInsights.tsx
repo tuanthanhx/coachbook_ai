@@ -76,7 +76,7 @@ const TodayInsights = () => {
       <div className="flex items-center py-8 p-4 relative">
         <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate('/')} />
         <h1 className="px-8 w-full text-center text-xl font-bold">Today's Insights</h1>
-        <History className="bg-white rounded-full w-10 h-10 p-2 absolute top-1/2 -translate-y-1/2 right-0 cursor-pointer" />
+        <History className="bg-white rounded-full w-10 h-10 p-2 absolute top-1/2 -translate-y-1/2 right-0 cursor-pointer" onClick={() => navigate('/completed-insights')} />
       </div>
       {insights.length === 0 ? (
         <div className="rounded-lg shadow-md py-6 px-4 mb-5 bg-white text-center">
@@ -118,12 +118,12 @@ const TodayInsights = () => {
                         />
                       </div>
                     ) : (
-                      <div className="bg-blue-100 p-5 rounded-lg mt-4">
+                      <div className="bg-blue-100 p-4 rounded-lg mt-4">
                         <h3 className="mb-2 font-bold">Your reflection</h3>
-                        <p className="mb-4 italic">"{slideStates[insight._id]?.comment || ''}"</p>
+                        <p className="italic">"{slideStates[insight._id]?.comment || ''}"</p>
                         {/* show thumbup or down */}
                         {slideStates[insight._id]?.isHelpful !== undefined && (
-                          <div className="flex items-center gap-2 mt-5">
+                          <div className="flex items-center gap-2 mt-4">
                             {slideStates[insight._id]?.isHelpful ? (
                               <ThumbsUp className="text-green-500" />
                             ) : (
