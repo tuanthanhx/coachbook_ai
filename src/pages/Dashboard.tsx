@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <Greeting user={{ avatar: user?.avatar, name: user?.name }} />
+      <Greeting user={{ avatar: user?.avatar, fullname: user?.fullname }} />
       <Quote />
       <Statistics statistics={{chatsCount: user?.chatsCount, coachesCount: user?.coachesCount}} />
       <Discover />

@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bell } from "lucide-react";
 
-const Greeting: React.FC<{ user: { avatar: string; name: string; } }> = ({ user }) => {
+const Greeting: React.FC<{ user: { avatar: string; fullname: string; } }> = ({ user }) => {
   return (
     <div className="flex justify-between items-center py-4">
       <div className="flex items-center">
@@ -12,7 +12,7 @@ const Greeting: React.FC<{ user: { avatar: string; name: string; } }> = ({ user 
         </Avatar>
         <div className="flex flex-col">
           <div>Hello</div>
-          <div className="font-bold text-xl">{user?.name || 'Welcome back!'}</div>
+          <div className="font-bold text-xl">{user?.fullname || 'Welcome back!'}</div>
         </div>
       </div>
       <Bell className="h-10 w-10 p-2 bg-white rounded-full text-gray-700 cursor-pointer" />

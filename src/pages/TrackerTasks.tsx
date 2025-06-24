@@ -1,6 +1,6 @@
 import Layout from '@/components/layouts/LayoutDefault';
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, CircleCheckBig, MessageCircle } from 'lucide-react';
+import { ChevronLeft, CircleCheckBig, Info, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState, useRef } from 'react';
 import apiService from '@/lib/apiService';
@@ -26,6 +26,7 @@ const Tracker = () => {
   const { id } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTaskInstruction, setSelectedTaskInstruction] = useState<string | null>(null);
+  const [bookTitle, setBookTitle] = useState<string>('');
   const recentlyCompletedTaskRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -38,8 +39,18 @@ const Tracker = () => {
       }
     };
 
+    const fetchBookTitle = async () => {
+      try {
+        const response = await apiService.get(`/books/${id}`);
+        setBookTitle(response.data.title);
+      } catch (error) {
+        console.error('Error fetching book title:', error);
+      }
+    };
+
     fetchTasks();
-  }, []);
+    fetchBookTitle();
+  }, [id]);
 
   const handleMarkAsComplete = async (taskId: string) => {
     try {
@@ -69,7 +80,7 @@ const Tracker = () => {
       {/* Header */}
       <div className="flex items-center py-8 p-4 relative">
         <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
-        <h1 className="px-8 w-full text-center text-xl font-bold">Atomic Habits</h1>
+        <h1 className="px-8 w-full min-h-7 text-center text-xl font-bold">{bookTitle}</h1>
       </div>
       {/* Statistics */}
       <div className="rounded-lg shadow-md py-8 px-5 mb-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
@@ -93,22 +104,30 @@ const Tracker = () => {
         <div
           key={index}
           className={`rounded-lg shadow-md p-5 mb-5 ${recentlyCompletedTaskRef.current === task._id ? 'bg-blue-100' : 'bg-white'}`}
-          onClick={() => setSelectedTaskInstruction(task.instruction)}
         >
           <h2 className="flex items-center font-bold mb-2">
             {task.isCompleted && <CircleCheckBig className="w-7 h-7 mr-2 text-blue-500" />}
             <span className="flex-1">{task.title}</span>
           </h2>
           <p className="text-gray-600">{task.description}</p>
-          {!task.isCompleted && (
-            <div className="flex flex-col gap-4 mt-4">
-              <Button className="w-full button" onClick={(e) => {
+          <div className="flex flex-col gap-4 mt-4">
+            <div className="flex items-center justify-between gap-4">
+              <Button className="flex-1 button" onClick={(e) => {
+                e.stopPropagation();
+                setSelectedTaskInstruction(task.instruction);
+              }}>
+                <Info />
+                Open Instruction
+              </Button>
+              <Button className="flex-1 button" onClick={(e) => {
                 e.stopPropagation();
                 navigate('/chats/1');
               }}>
                 <MessageCircle />
                 Ask Coach
               </Button>
+            </div>
+            {!task.isCompleted && (
               <Button className="w-full button-primary" onClick={(e) => {
                 e.stopPropagation();
                 handleMarkAsComplete(task._id);
@@ -116,8 +135,8 @@ const Tracker = () => {
                 <CircleCheckBig />
                 Mark as Complete
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       ))}
 
