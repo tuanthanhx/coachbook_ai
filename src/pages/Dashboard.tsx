@@ -9,9 +9,6 @@ import { useAuth } from '@/context/AuthContext';
 
 const Dashboard = () => {
   const { user } = useAuth();
-
-  console.log('User profile:', user);
-
   return (
     <Layout>
       <Greeting user={{ avatar: user?.avatar, fullname: user?.fullname }} />

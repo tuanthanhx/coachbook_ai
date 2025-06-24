@@ -17,8 +17,6 @@ const Settings = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
-  console.log('User in Settings:', user);
-
   const handleSignOut = async () => {
     try {
       // Call API to remove refreshToken from the DB using AuthContext

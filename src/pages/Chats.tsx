@@ -3,36 +3,45 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft, EllipsisVertical, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useEffect, useState } from 'react';
+import apiService from '@/lib/apiService';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+interface Chat {
+  image: string;
+  title: string;
+  message: string;
+  updatedAt: string;
+}
 
 const Chats = () => {
   const navigate = useNavigate();
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const chats = [
-    {
-      image: '/assets/img/book_001.png',
-      title: 'Atomic Habits Coach',
-      message: 'Hey, how can I help you today?',
-      updatedAt: '10:03 PM',
-    },
-    {
-      image: '/assets/img/book_001.png',
-      title: 'Deep Work Coach',
-      message: 'Let’s focus on your deep work today asdf saff fsdfds d sdfsdf!',
-      updatedAt: 'Yesterday',
-    },
-    {
-      image: '/assets/img/book_001.png',
-      title: 'The Power of Habit Coach',
-      message: 'Ready to build some new habits?',
-      updatedAt: 'Yesterday',
-    },
-    {
-      image: '/assets/img/book_001.png',
-      title: 'Grit Coach',
-      message: 'Let’s talk about perseverance!',
-      updatedAt: '05/01/2025',
-    },
-  ];
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const response = await apiService.get('/books/following');
+        const formattedChats: Chat[] = response.data.map((book: any) => ({
+          image: book.imageUrl || '/assets/img/book_001.png',
+          title: book.title,
+          message: `Chat with ${book.title} Coach`,
+          updatedAt: 'Recently',
+        }));
+        setChats(formattedChats);
+      } catch (error) {
+        console.error('Failed to fetch chats:', error);
+      }
+    };
+
+    fetchChats();
+  }, []);
+
+  const filteredChats = chats.filter(chat =>
+    chat.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    chat.message.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <Layout>
@@ -49,6 +58,8 @@ const Chats = () => {
             type="text"
             placeholder="Search chats..."
             className="w-full h-11 p-4 pl-10 rounded-full bg-white"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         </div>
@@ -60,9 +71,12 @@ const Chats = () => {
       </div>
       {/* Chats List */}
       <div className="flex flex-col gap-8">
-        {chats.map((chat, index) => (
+        {filteredChats.map((chat, index) => (
           <div key={index} className="flex justify-between items-center gap-4 cursor-pointer" onClick={() => navigate(`/chats/${index + 1}`)}>
-            <img src={chat.image} alt={chat.title} className="w-16 h-16 rounded-full" />
+            <Avatar className="w-16 h-16">
+              <AvatarImage src={chat.image} alt={chat.title} />
+              <AvatarFallback>{chat.title.charAt(0)}</AvatarFallback>
+            </Avatar>
             <div className="flex-1">
               <h2 className="mb-1 font-bold">{chat.title}</h2>
               <p className="w-[210px] text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{chat.message}</p>
