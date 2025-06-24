@@ -1,35 +1,69 @@
-import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import apiService from '@/lib/apiService';
 import Layout from '@/components/layouts/LayoutDefault';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChevronLeft, EllipsisVertical, Send } from 'lucide-react';
+// @ts-ignore
+import ReactMarkdown from 'react-markdown';
+import './ChatInterface.css';
+
+interface Message {
+  type: 'ai' | 'user';
+  text: string;
+}
 
 const ChatInterface = () => {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState([
-    { type: 'ai', text: `Hi! I'm your Atomic Habits coach. I'm here to help you build better habits and break bad ones. What would you like to work on today?` },
-    { type: 'user', text: 'How do I start a new habit?' },
-    { type: 'ai', text: 'Remember, habits are the compound interest of self-improvement. Small changes might not seem to matter much on any given day, but the impact they deliver over months and years can be enormous.' },
-    { type: 'user', text: 'Help me design my environment' },
-  ]);
+  const { id } = useParams();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  const handleSend = () => {
+  const fetchChatHistory = async (id: string) => {
+    try {
+      const response = await apiService.get(`/chat/${id}`);
+      console.log('Chat history:', response.data);
+      const formattedMessages = response.data.map((item: any) => ({
+        type: item.sender === 'assistant' ? 'ai' : 'user',
+        text: item.message,
+      }));
+      setMessages(formattedMessages);
+    } catch (error) {
+      console.error('Error fetching chat history:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchChatHistory(id);
+    }
+  }, [id]);
+
+  const handleSend = async () => {
     if (!input.trim()) return;
 
-    setMessages([...messages, { type: 'user', text: input }]);
+    const newMessage: Message = { type: 'user', text: input };
+    setMessages([...messages, newMessage]);
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      const response = await apiService.post(`/chat/${id}`, {
+        message: input,
+        sender: 'user',
+      });
+
       setMessages((prev) => [
         ...prev,
-        { type: 'ai', text: 'This is a simulated response. How else can I help?' },
+        { type: 'ai', text: response.data.reply },
       ]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -52,14 +86,18 @@ const ChatInterface = () => {
                 className={`p-4 rounded-lg shadow-md max-w-xs ${message.type === 'ai' ? 'bg-white rounded-bl-none text-left' : 'bg-gradient-to-r from-[#2564ea] to-[#16a14b] rounded-br-none text-white text-right'
                   }`}
               >
-                {message.text}
+                <ReactMarkdown>{message.text}</ReactMarkdown>
               </div>
             </div>
           ))}
-          {isTyping && (
+          {!isTyping && (
             <div className="mb-4 flex justify-start">
-              <div className="p-3 rounded-lg max-w-xs bg-gray-200 text-left">
-                <span className="animate-pulse">...</span>
+              <div className="p-3 rounded-lg rounded-bl-none shadow-md max-w-xs bg-white text-left">
+                <div className="typing-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
               </div>
             </div>
           )}
