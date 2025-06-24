@@ -1,6 +1,6 @@
 import Layout from '@/components/layouts/LayoutDefault';
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, CircleCheckBig } from 'lucide-react';
+import { ChevronLeft, CircleCheckBig, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState, useRef } from 'react';
 import apiService from '@/lib/apiService';
@@ -60,6 +60,10 @@ const Tracker = () => {
     }
   };
 
+  const completedTasksCount = tasks.filter(task => task.isCompleted).length;
+  const totalTasksCount = tasks.length;
+  const completedPercentage = totalTasksCount > 0 ? Math.round((completedTasksCount / totalTasksCount) * 100) : 0;
+
   return (
     <Layout>
       {/* Header */}
@@ -67,24 +71,20 @@ const Tracker = () => {
         <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
         <h1 className="px-8 w-full text-center text-xl font-bold">Atomic Habits</h1>
       </div>
-      {/* Cover */}
+      {/* Statistics */}
       <div className="rounded-lg shadow-md py-8 px-5 mb-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
-        <div className="flex justify-between mb-4">
-          <div className="w-1/3 flex flex-col justify-center items-center text-center text-white">
-            <span className="font-bold text-2xl">4</span>
-            <span>Day Streak</span>
-          </div>
-          <div className="w-1/3 flex flex-col justify-center items-center text-center text-white">
-            <span className="font-bold text-2xl">25%</span>
+        <div className="flex justify-between mb-4 px-6">
+          <div className="w-1/2 flex flex-col justify-center items-center text-center text-white">
+            <span className="font-bold text-2xl">{completedPercentage}%</span>
             <span>Completed</span>
           </div>
-          <div className="w-1/3 flex flex-col justify-center items-center text-center text-white">
-            <span className="font-bold text-2xl">2/8</span>
+          <div className="w-1/2 flex flex-col justify-center items-center text-center text-white">
+            <span className="font-bold text-2xl">{completedTasksCount}/{totalTasksCount}</span>
             <span>Tasks</span>
           </div>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div className="bg-black h-2 rounded-full" style={{ width: '50%' }}></div>
+          <div className="bg-black h-2 rounded-full" style={{ width: `${completedPercentage}%` }}></div>
         </div>
       </div>
 
@@ -106,12 +106,14 @@ const Tracker = () => {
                 e.stopPropagation();
                 navigate('/chats/1');
               }}>
+                <MessageCircle />
                 Ask Coach
               </Button>
               <Button className="w-full button-primary" onClick={(e) => {
                 e.stopPropagation();
                 handleMarkAsComplete(task._id);
               }}>
+                <CircleCheckBig />
                 Mark as Complete
               </Button>
             </div>

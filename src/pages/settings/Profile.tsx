@@ -88,7 +88,7 @@ const Profile = () => {
         </Avatar>
         <label
           htmlFor="avatar-upload"
-          className="flex justify-center items-center absolute bottom-0 right-4 bg-gray-800 text-white text-sm w-8 h-8 rounded-full cursor-pointer"
+          className="flex justify-center items-center absolute top-1/2 left-1/2 ml-16 -translate-y-1/2 bg-gray-800 text-white text-sm w-8 h-8 rounded-full cursor-pointer"
         >
           <Pencil className="w-5 h-5" />
         </label>

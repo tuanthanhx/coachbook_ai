@@ -14,6 +14,8 @@ type Coach = {
   description: string;
   tags: string[];
   progress: number;
+  totalTasksCount: number;
+  completedTasksCount: number;
 };
 
 const Tracker = () => {
@@ -107,20 +109,26 @@ const Tracker = () => {
         </Button>
       </div>
       {/* Coaches List */}
-      <div className="flex flex-col gap-5">
-        {filteredCoaches.map((coach, index) => (
-          <TrackerItem
-            key={index}
-            id={coach._id}
-            image={coach.imageUrl}
-            title={coach.title}
-            author={coach.author}
-            description={coach.description}
-            tags={coach.tags}
-            progress={coach.progress}
-          />
-        ))}
-      </div>
+      {filteredCoaches.length === 0 ? (
+        <p className="p-5 bg-white rounded-lg shadow-md text-gray-600">No coaches to display</p>
+      ) : (
+        <div className="flex flex-col gap-5">
+          {filteredCoaches.map((coach, index) => (
+            <TrackerItem
+              key={index}
+              id={coach._id}
+              image={coach.imageUrl}
+              title={coach.title}
+              author={coach.author}
+              description={coach.description}
+              tags={coach.tags}
+              progress={coach.progress}
+              totalTasksCount={coach.totalTasksCount}
+              completedTasksCount={coach.completedTasksCount}
+            />
+          ))}
+        </div>
+      )}
 
     </Layout>
   );

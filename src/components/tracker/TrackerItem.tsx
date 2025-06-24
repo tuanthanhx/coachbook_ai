@@ -10,9 +10,11 @@ interface TrackerItemProps {
   description: string;
   tags: string[];
   progress: number;
+  totalTasksCount: number;
+  completedTasksCount: number;
 }
 
-const TrackerItem: React.FC<TrackerItemProps> = ({ id, image, title, author, description, tags, progress }) => {
+const TrackerItem: React.FC<TrackerItemProps> = ({ id, image, title, author, description, tags, progress, totalTasksCount, completedTasksCount }) => {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
@@ -32,7 +34,7 @@ const TrackerItem: React.FC<TrackerItemProps> = ({ id, image, title, author, des
           {/* Progress bar */}
           <div className="mt-4">
             <div className="flex justify-between text-sm text-gray-600">
-              <div>4/8 Tasks Completed</div>
+              <div>{completedTasksCount}/{totalTasksCount} Tasks Completed</div>
               <div>{progress}%</div>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-1">

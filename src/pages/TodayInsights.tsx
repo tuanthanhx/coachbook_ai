@@ -1,6 +1,6 @@
 import Layout from '@/components/layouts/LayoutDefault';
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, History, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { ChevronLeft, CircleCheckBig, History, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -54,6 +54,7 @@ const TodayInsights = () => {
       {/* Buttons */}
       <div className="flex flex-col gap-4">
         <Button className="w-full button-primary" onClick={() => complete()}>
+          <CircleCheckBig />
           Mark as Complete
         </Button>
       </div>

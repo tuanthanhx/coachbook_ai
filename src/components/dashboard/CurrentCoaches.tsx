@@ -50,7 +50,7 @@ const CurrentCoaches: React.FC = () => {
               author={coach.author}
               description={coach.description}
               tags={coach.tags}
-              progress={coach.progress || 50}
+              progress={coach.progress}
               isSubscribed={true}
             />
           ))}
