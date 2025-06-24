@@ -10,9 +10,10 @@ interface CoachItemProps {
   description: string;
   tags: string[];
   progress: number;
+  isSubscribed?: boolean;
 }
 
-const CoachItem: React.FC<CoachItemProps> = ({ id, imageUrl, title, author, description, tags, progress }) => {
+const CoachItem: React.FC<CoachItemProps> = ({ id, imageUrl, title, author, description, tags = [], progress, isSubscribed = false }) => {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
@@ -42,9 +43,16 @@ const CoachItem: React.FC<CoachItemProps> = ({ id, imageUrl, title, author, desc
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <Button className="w-full button-primary" onClick={() => navigate('/chats/1')}>
-          Start Coaching
-        </Button>
+        {!isSubscribed && (
+          <Button className="w-full button-primary" onClick={() => navigate(`/chats/${id}`)}>
+            Start Coaching
+          </Button>
+        )}
+        {isSubscribed && (
+          <Button className="w-full button-primary" onClick={() => navigate(`/chats/${id}`)}>
+            Continue Chatting
+          </Button>
+        )}
         <Button className="w-full button" onClick={() => navigate(`/coaches/${id}`)}>
           View Coach Profile
         </Button>

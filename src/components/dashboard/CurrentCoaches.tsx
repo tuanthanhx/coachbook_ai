@@ -1,63 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CoachItem from '@/components/dashboard/CoachItem';
+import apiService from '@/lib/apiService';
+
+interface Coach {
+  _id: string;
+  imageUrl: string;
+  title: string;
+  author: string;
+  description: string;
+  tags: string[];
+  progress: number;
+}
 
 const CurrentCoaches: React.FC = () => {
-  const coaches = [
-    {
-      _id: 'aaaaaaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      imageUrl: '/assets/img/book_001.png',
-      title: 'Atomic Habits',
-      author: 'James Clear',
-      description: 'Build better habits, break bad ones, and make small changes that lead to remarkable results.',
-      tags: ['Productivity', 'Self-Improvement', 'Mindfulness'],
-      progress: 75,
-    },
-    {
-      _id: 'aaaaaaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      imageUrl: '/assets/img/book_001.png',
-      title: 'Deep Work',
-      author: 'Cal Newport',
-      description: 'Rules for focused success in a distracted world.',
-      tags: ['Focus', 'Productivity', 'Work'],
-      progress: 50,
-    },
-    {
-      _id: 'aaaaaaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      imageUrl: '/assets/img/book_001.png',
-      title: 'The Power of Habit',
-      author: 'Charles Duhigg',
-      description: 'Why we do what we do in life and business.',
-      tags: ['Habits', 'Behavior', 'Psychology'],
-      progress: 30,
-    },
-    {
-      _id: 'aaaaaaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      imageUrl: '/assets/img/book_001.png',
-      title: 'Grit',
-      author: 'Angela Duckworth',
-      description: 'The power of passion and perseverance.',
-      tags: ['Perseverance', 'Success', 'Motivation'],
-      progress: 90,
-    },
-  ];
+  const [coaches, setCoaches] = useState<Coach[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCoaches = async () => {
+      try {
+        const response = await apiService.get('/books/following');
+        setCoaches(response.data);
+      } catch (error) {
+        console.error('Failed to fetch coaches:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCoaches();
+  }, []);
 
   return (
     <div className="mt-8">
       <h2 className="text-xl font-bold mb-4">Current Coaches</h2>
-      <div className="flex flex-col gap-5">
-        {coaches.map((coach, index) => (
-          <CoachItem
-            key={index}
-            id={coach._id}
-            imageUrl={coach.imageUrl}
-            title={coach.title}
-            author={coach.author}
-            description={coach.description}
-            tags={coach.tags}
-            progress={coach.progress}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <p className="p-5 bg-white rounded-lg shadow-md text-gray-600">Loading...</p>
+      ) : coaches.length === 0 ? (
+        <p className="p-5 bg-white rounded-lg shadow-md text-gray-600">
+          You are not following any coaches yet.<br />Start exploring and follow some to see them here!
+        </p>
+      ) : (
+        <div className="flex flex-col gap-5">
+          {coaches.map((coach, index) => (
+            <CoachItem
+              key={index}
+              id={coach._id}
+              imageUrl={coach.imageUrl}
+              title={coach.title}
+              author={coach.author}
+              description={coach.description}
+              tags={coach.tags}
+              progress={coach.progress || 50}
+              isSubscribed={true}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
