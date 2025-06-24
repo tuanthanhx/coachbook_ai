@@ -22,12 +22,25 @@ const DailyInsights: React.FC = () => {
   const navigate = useNavigate();
   const [api, setApi] = useState<CarouselApi>();
   const [insights, setInsights] = useState<Insight[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     apiService.get('/books/daily-insights')
       .then(response => setInsights(response.data))
       .catch(error => console.error('Error fetching daily insights:', error));
   }, []);
+
+  useEffect(() => {
+    if (api) {
+      const onSelect = () => {
+        setSelectedIndex(api.selectedScrollSnap());
+      };
+      api.on('select', onSelect);
+      return () => {
+        api.off('select', onSelect);
+      };
+    }
+  }, [api]);
 
   return (
     <div className="mt-5 py-8 px-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b] rounded-lg shadow-md text-white">
@@ -48,8 +61,16 @@ const DailyInsights: React.FC = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="flex justify-end gap-4 items-center mt-4">
+        <div className="flex justify-between items-center mt-4">
           <MoveLeft className="cursor-pointer" onClick={() => { api?.scrollPrev() }} />
+          <div className="flex gap-2">
+            {[...Array(api?.scrollSnapList().length || 0)].map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full ${index === selectedIndex ? 'bg-green-500' : 'bg-gray-300'}`}
+              />
+            ))}
+          </div>
           <MoveRight className="cursor-pointer" onClick={() => { api?.scrollNext() }} />
         </div>
       </Carousel>
