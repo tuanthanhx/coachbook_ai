@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 
 interface TrackerItemProps {
+  id: string;
   image: string;
   title: string;
   author: string;
@@ -11,7 +12,7 @@ interface TrackerItemProps {
   progress: number;
 }
 
-const TrackerItem: React.FC<TrackerItemProps> = ({ image, title, author, description, tags, progress }) => {
+const TrackerItem: React.FC<TrackerItemProps> = ({ id, image, title, author, description, tags, progress }) => {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
@@ -41,10 +42,10 @@ const TrackerItem: React.FC<TrackerItemProps> = ({ image, title, author, descrip
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <Button className="w-full button-primary" onClick={() => navigate('/tracker/1/tasks')}>
+        <Button className="w-full button-primary" onClick={() => navigate(`/tracker/${id}/tasks`)}>
           View Tasks
         </Button>
-        <Button className="w-full button" onClick={() => navigate('/coaches/1')}>
+        <Button className="w-full button" onClick={() => navigate(`/coaches/${id}`)}>
           View Coach Profile
         </Button>
       </div>

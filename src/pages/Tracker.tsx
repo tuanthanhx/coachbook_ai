@@ -3,36 +3,66 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TrackerItem from '@/components/tracker/TrackerItem';
+import { useState, useEffect } from 'react';
+import apiService from '@/lib/apiService';
+
+type Coach = {
+  _id: string;
+  imageUrl: string;
+  title: string;
+  author: string;
+  description: string;
+  tags: string[];
+  progress: number;
+};
 
 const Tracker = () => {
   const navigate = useNavigate();
 
-  const coaches = [
-    {
-      image: '/assets/img/book_001.png',
-      title: 'Atomic Habits',
-      author: 'James Clear',
-      description: 'Build better habits, break bad ones, and make small changes that lead to remarkable results.',
-      tags: ['Productivity', 'Self-Improvement', 'Mindfulness'],
-      progress: 50,
-    },
-    {
-      image: '/assets/img/book_001.png',
-      title: 'Deep Work',
-      author: 'Cal Newport',
-      description: 'Rules for focused success in a distracted world.',
-      tags: ['Focus', 'Productivity', 'Work'],
-      progress: 50,
-    },
-    {
-      image: '/assets/img/book_001.png',
-      title: 'The Power of Habit',
-      author: 'Charles Duhigg',
-      description: 'Why we do what we do in life and business.',
-      tags: ['Habits', 'Behavior', 'Psychology'],
-      progress: 50,
-    },
-  ];
+  const [coaches, setCoaches] = useState<Coach[]>([]);
+  const [filteredCoaches, setFilteredCoaches] = useState<Coach[]>([]);
+  const [activeFilter, setActiveFilter] = useState<'all' | 'active' | 'done'>('all');
+
+  useEffect(() => {
+    const fetchCoaches = async () => {
+      try {
+        const response = await apiService.get<Coach[]>('/books/following');
+        setCoaches(response.data);
+        setFilteredCoaches(response.data);
+      } catch (error) {
+        console.error('Error fetching coaches:', error);
+      }
+    };
+
+    fetchCoaches();
+  }, []);
+
+  useEffect(() => {
+    const filterCoaches = () => {
+      let filtered = coaches;
+
+      setFilteredCoaches(filtered);
+    };
+
+    filterCoaches();
+  }, [coaches]);
+
+  const handleFilter = (filterType: 'all' | 'active' | 'done') => {
+    setActiveFilter(filterType);
+
+    let filtered = coaches;
+
+    if (filterType === 'active') {
+      filtered = coaches.filter(coach => coach.progress < 100);
+    } else if (filterType === 'done') {
+      filtered = coaches.filter(coach => coach.progress === 100);
+    }
+
+    setFilteredCoaches(filtered);
+  };
+
+  const activeCoachesCount = coaches.filter(coach => coach.progress < 100).length;
+  const completedCoachesCount = coaches.filter(coach => coach.progress === 100).length;
 
   return (
     <Layout>
@@ -45,22 +75,44 @@ const Tracker = () => {
       <div className="rounded-lg shadow-md py-8 px-5 mb-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
         <div className="flex flex-col items-center">
           <Target className="w-11 h-11 mb-2 text-white" />
-          <h2 className="mb-1 text-white text-3xl font-bold">2/8</h2>
-          <p className="text-white">Tasks Completed</p>
+          <h2 className="mb-1 text-white text-3xl font-bold">{completedCoachesCount}/{coaches.length}</h2>
+          <p className="text-white">{completedCoachesCount === 1 ? 'Coach Completed' : 'Coaches Completed'}</p>
         </div>
       </div>
       {/* Filter */}
       <div className="flex gap-4 mb-5">
-        <Button variant="default" size="lg" className="rounded-full font-bold">All (3)</Button>
-        <Button variant="outline" size="lg" className="rounded-full font-bold">Active (2)</Button>
-        <Button variant="outline" size="lg" className="rounded-full font-bold">Done (1)</Button>
+        <Button
+          variant={activeFilter === 'all' ? 'default' : 'outline'}
+          size="lg"
+          className="rounded-full font-bold"
+          onClick={() => handleFilter('all')}
+        >
+          All ({coaches.length})
+        </Button>
+        <Button
+          variant={activeFilter === 'active' ? 'default' : 'outline'}
+          size="lg"
+          className="rounded-full font-bold"
+          onClick={() => handleFilter('active')}
+        >
+          Active ({activeCoachesCount})
+        </Button>
+        <Button
+          variant={activeFilter === 'done' ? 'default' : 'outline'}
+          size="lg"
+          className="rounded-full font-bold"
+          onClick={() => handleFilter('done')}
+        >
+          Done ({completedCoachesCount})
+        </Button>
       </div>
       {/* Coaches List */}
       <div className="flex flex-col gap-5">
-        {coaches.map((coach, index) => (
+        {filteredCoaches.map((coach, index) => (
           <TrackerItem
             key={index}
-            image={coach.image}
+            id={coach._id}
+            image={coach.imageUrl}
             title={coach.title}
             author={coach.author}
             description={coach.description}
