@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { getBookById } from '@/lib/apiService';
 
 interface Book {
-  id: string;
+  _id: string;
   title: string;
   author: string;
   description?: string;
@@ -72,7 +72,7 @@ const CoachProfile = () => {
         </div>
       )}
       {/* Progress */}
-      <div className="bg-white rounded-lg shadow-md p-5 mb-5">
+      {/* <div className="bg-white rounded-lg shadow-md p-5 mb-5">
         <h2 className="font-bold text-lg mb-2">Your Progress</h2>
         <div>
           <div className="flex justify-between text-sm text-gray-600 mb-2">
@@ -93,15 +93,15 @@ const CoachProfile = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* Buttons */}
       <div className="flex flex-col gap-4">
-        <Button className="w-full button-primary" onClick={() => navigate('/chats/1')}>
-          Continue Chat
+        <Button className="w-full button-primary" onClick={() => navigate(`/chats/${book?._id}`)}>
+          Start Coaching
         </Button>
-        <Button className="w-full button" onClick={() => navigate('/insights/completed')}>
+        {/* <Button className="w-full button" onClick={() => navigate('/insights/completed')}>
           View Completed Insights
-        </Button>
+        </Button> */}
       </div>
     </Layout>
   );
