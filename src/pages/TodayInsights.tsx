@@ -40,7 +40,22 @@ const TodayInsights = () => {
 
   useEffect(() => {
     apiService.get('/books/daily-insights')
-      .then(response => setInsights(response.data))
+      .then(response => {
+        const insightsData: Insight[] = response.data;
+        setInsights(insightsData);
+
+        // Merge API properties into slideStates
+        const updatedSlideStates = insightsData.reduce<Record<string, { comment: string; isHelpful: boolean | undefined; completed?: boolean }>>((acc, insight) => {
+          acc[insight._id] = {
+            comment: insight.comment || '',
+            isHelpful: insight.isHelpful,
+            completed: insight.isCompleted,
+          };
+          return acc;
+        }, {});
+
+        setSlideStates(updatedSlideStates);
+      })
       .catch(error => console.error('Error fetching daily insights:', error));
   }, []);
 
@@ -74,7 +89,7 @@ const TodayInsights = () => {
           <CarouselContent>
             {insights.map((insight, index) => (
               <CarouselItem key={index}>
-                {(insight.isCompleted || slideStates[insight._id]?.completed) && (
+                {slideStates[insight._id]?.completed && (
                   <div className="rounded-lg shadow-md py-7 px-5 mb-5 text-center text-white bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
                     <CircleCheckBig className="w-10 h-10 mx-auto mb-4" />
                     <div className="text-xl font-bold mb-2">Insight Completed! 🎉</div>
@@ -85,7 +100,7 @@ const TodayInsights = () => {
                     <h2 className="text-xl font-bold">{insight.title}</h2>
                     <p className="mb-4 text-gray-600">{insight.bookTitle} • {insight.bookAuthor}</p>
                     <p>{insight.content}</p>
-                    {(!insight.isCompleted && !slideStates[insight._id]?.completed) ? (
+                    {!slideStates[insight._id]?.completed ? (
                       <div className="bg-blue-100 p-5 rounded-lg mt-4">
                         <h3 className="mb-2 font-bold">Reflect on this insight</h3>
                         <p className="mb-4">Reflect on this insight and think about how it applies to your daily life. What's one small action you can take today to make progress?</p>
@@ -105,17 +120,17 @@ const TodayInsights = () => {
                     ) : (
                       <div className="bg-blue-100 p-5 rounded-lg mt-4">
                         <h3 className="mb-2 font-bold">Your reflection</h3>
-                        <p className="mb-4 italic">"{insight.comment || slideStates[insight._id]?.comment || ''}"</p>
+                        <p className="mb-4 italic">"{slideStates[insight._id]?.comment || ''}"</p>
                         {/* show thumbup or down */}
-                        {(insight.isHelpful !== undefined || slideStates[insight._id]?.isHelpful !== undefined) && (
+                        {slideStates[insight._id]?.isHelpful !== undefined && (
                           <div className="flex items-center gap-2 mt-5">
-                            {insight.isHelpful || slideStates[insight._id]?.isHelpful ? (
+                            {slideStates[insight._id]?.isHelpful ? (
                               <ThumbsUp className="text-green-500" />
                             ) : (
                               <ThumbsDown className="text-red-500" />
                             )}
                             <span className="text-gray-600">
-                              {insight.isHelpful || slideStates[insight._id]?.isHelpful ? 'Helpful' : 'Not Helpful'}
+                              {slideStates[insight._id]?.isHelpful ? 'Helpful' : 'Not Helpful'}
                             </span>
                           </div>
                         )}
@@ -123,7 +138,7 @@ const TodayInsights = () => {
                     )}
                   </div>
                 </div>
-                {(!insight.isCompleted && !slideStates[insight._id]?.completed) && (
+                {!slideStates[insight._id]?.completed && (
                   <>
                     <div className="rounded-lg shadow-md p-5 mb-5 bg-white">
                       <h2 className="font-bold text-lg mb-2">How was this insight?</h2>
