@@ -1,10 +1,40 @@
 import Layout from '@/components/layouts/LayoutDefault';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { getBookById } from '@/lib/apiService';
+
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+  description?: string;
+  tags?: string[];
+  imageUrl?: string;
+  coachingStyle?: string;
+  corePrinciples?: string[];
+}
 
 const CoachProfile = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [book, setBook] = useState<Book | null>(null);
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        if (id) {
+          const bookData = await getBookById(id);
+          setBook(bookData);
+        }
+      } catch (error) {
+        console.error('Failed to fetch book:', error);
+      }
+    };
+
+    fetchBook();
+  }, [id]);
 
   return (
     <Layout>
@@ -14,29 +44,33 @@ const CoachProfile = () => {
         <h1 className="px-8 w-full text-center text-xl font-bold">Coach Profile</h1>
       </div>
       {/* Cover */}
-      <div className="rounded-lg shadow-md py-10 px-5 mb-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
-        <div className="flex flex-col items-center">
-          <img className="w-30 h-45 rounded-lg mb-4 shadow-lg" src="/assets/img/book_001.png" alt="Coach" />
-          <h2 className="mb-2 text-white text-xl font-bold">Atomic Habits</h2>
-          <p className="text-white text-sm">by James Clear</p>
+      {book && (
+        <div className="rounded-lg shadow-md py-10 px-5 mb-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
+          <div className="flex flex-col items-center">
+            <img className="w-30 h-45 rounded-lg mb-4 shadow-lg" src={book.imageUrl || '/assets/img/book_001.png'} alt="Coach" />
+            <h2 className="mb-2 text-white text-xl font-bold">{book.title}</h2>
+            <p className="text-white text-sm">by {book.author}</p>
+          </div>
         </div>
-      </div>
+      )}
       {/* Style */}
-      <div className="bg-white rounded-lg shadow-md p-5 mb-5">
-        <h2 className="font-bold text-lg mb-2">Coaching Style</h2>
-        <p>I'm here to help you build lasting habits through small, consistent actions. I focus on practical strategies, evidence-based methods, and making change feel effortless.</p>
-      </div>
+      {book && (
+        <div className="bg-white rounded-lg shadow-md p-5 mb-5">
+          <h2 className="font-bold text-lg mb-2">Coaching Style</h2>
+          <p>{book.coachingStyle}</p>
+        </div>
+      )}
       {/* Principles */}
-      <div className="bg-white rounded-lg shadow-md p-5 mb-5">
-        <h2 className="font-bold text-lg mb-2">Core Principles</h2>
-        <ul className="list-disc pl-5">
-          <li>Focus on systems, not goals</li>
-          <li>Make it obvious, attractive, easy, and satisfying</li>
-          <li>Start with tiny habits that stick</li>
-          <li>Use the 2-minute rule for new habits</li>
-          <li>Track your progress visually</li>
-        </ul>
-      </div>
+      {book && (
+        <div className="bg-white rounded-lg shadow-md p-5 mb-5">
+          <h2 className="font-bold text-lg mb-2">Core Principles</h2>
+          <ul className="list-disc pl-5">
+            {book.corePrinciples?.map((principle, index) => (
+              <li key={index}>{principle}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       {/* Progress */}
       <div className="bg-white rounded-lg shadow-md p-5 mb-5">
         <h2 className="font-bold text-lg mb-2">Your Progress</h2>

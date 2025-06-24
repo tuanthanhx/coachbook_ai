@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 
 interface CoachItemProps {
+  id: string,
   imageUrl: string;
   title: string;
   author: string;
@@ -11,7 +12,7 @@ interface CoachItemProps {
   progress: number;
 }
 
-const CoachItem: React.FC<CoachItemProps> = ({ imageUrl, title, author, description, tags, progress }) => {
+const CoachItem: React.FC<CoachItemProps> = ({ id, imageUrl, title, author, description, tags, progress }) => {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
@@ -44,7 +45,7 @@ const CoachItem: React.FC<CoachItemProps> = ({ imageUrl, title, author, descript
         <Button className="w-full button-primary" onClick={() => navigate('/chats/1')}>
           Start Coaching
         </Button>
-        <Button className="w-full button" onClick={() => navigate('/coaches/1')}>
+        <Button className="w-full button" onClick={() => navigate(`/coaches/${id}`)}>
           View Coach Profile
         </Button>
       </div>

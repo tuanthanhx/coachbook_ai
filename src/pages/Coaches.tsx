@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import apiService from '@/lib/apiService';
 
 type Coach = {
+  _id: string;
   imageUrl: string;
   title: string;
   author: string;
@@ -103,6 +104,7 @@ const Coaches = () => {
         {filteredCoaches.map((coach, index) => (
           <CoachItem
             key={index}
+            id={coach._id}
             imageUrl={coach.imageUrl}
             title={coach.title}
             author={coach.author}

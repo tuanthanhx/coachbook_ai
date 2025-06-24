@@ -76,4 +76,13 @@ export const getRandomQuote = async () => {
   }
 };
 
+export const getBookById = async (id: string) => {
+  try {
+    const response = await apiService.get(`/books/${id}`);
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 export default apiService;

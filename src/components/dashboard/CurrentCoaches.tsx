@@ -4,7 +4,8 @@ import CoachItem from '@/components/dashboard/CoachItem';
 const CurrentCoaches: React.FC = () => {
   const coaches = [
     {
-      image: '/assets/img/book_001.png',
+      _id: 'aaaaaaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      imageUrl: '/assets/img/book_001.png',
       title: 'Atomic Habits',
       author: 'James Clear',
       description: 'Build better habits, break bad ones, and make small changes that lead to remarkable results.',
@@ -12,7 +13,8 @@ const CurrentCoaches: React.FC = () => {
       progress: 75,
     },
     {
-      image: '/assets/img/book_001.png',
+      _id: 'aaaaaaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      imageUrl: '/assets/img/book_001.png',
       title: 'Deep Work',
       author: 'Cal Newport',
       description: 'Rules for focused success in a distracted world.',
@@ -20,7 +22,8 @@ const CurrentCoaches: React.FC = () => {
       progress: 50,
     },
     {
-      image: '/assets/img/book_001.png',
+      _id: 'aaaaaaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      imageUrl: '/assets/img/book_001.png',
       title: 'The Power of Habit',
       author: 'Charles Duhigg',
       description: 'Why we do what we do in life and business.',
@@ -28,7 +31,8 @@ const CurrentCoaches: React.FC = () => {
       progress: 30,
     },
     {
-      image: '/assets/img/book_001.png',
+      _id: 'aaaaaaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      imageUrl: '/assets/img/book_001.png',
       title: 'Grit',
       author: 'Angela Duckworth',
       description: 'The power of passion and perseverance.',
@@ -44,7 +48,8 @@ const CurrentCoaches: React.FC = () => {
         {coaches.map((coach, index) => (
           <CoachItem
             key={index}
-            image={coach.image}
+            id={coach._id}
+            imageUrl={coach.imageUrl}
             title={coach.title}
             author={coach.author}
             description={coach.description}
