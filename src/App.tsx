@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
+import { QuoteProvider } from '@/context/QuoteContext';
 import Dashboard from '@/pages/Dashboard';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
@@ -20,25 +21,27 @@ import PrivateRoute from '@/components/PrivateRoute';
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/coaches" element={<PrivateRoute><Coaches /></PrivateRoute>} />
-          <Route path="/coaches/:id" element={<PrivateRoute><CoachProfile /></PrivateRoute>} />
-          <Route path="/chats" element={<PrivateRoute><Chats /></PrivateRoute>} />
-          <Route path="/chats/:id" element={<PrivateRoute><ChatInterface /></PrivateRoute>} />
-          <Route path="/insights" element={<PrivateRoute><TodayInsights /></PrivateRoute>} />
-          <Route path="/tracker" element={<PrivateRoute><Tracker /></PrivateRoute>} />
-          <Route path="/tracker/:id/tasks" element={<PrivateRoute><TrackerTasks /></PrivateRoute>} />
-          <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
-          <Route path="/settings/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-          <Route path="/settings/notification" element={<PrivateRoute><Notification /></PrivateRoute>} />
-          <Route path="/settings/password" element={<PrivateRoute><Password /></PrivateRoute>} />
-          <Route path="/settings/subscription" element={<PrivateRoute><Subscription /></PrivateRoute>} />
-        </Routes>
-      </Router>
+      <QuoteProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/coaches" element={<PrivateRoute><Coaches /></PrivateRoute>} />
+            <Route path="/coaches/:id" element={<PrivateRoute><CoachProfile /></PrivateRoute>} />
+            <Route path="/chats" element={<PrivateRoute><Chats /></PrivateRoute>} />
+            <Route path="/chats/:id" element={<PrivateRoute><ChatInterface /></PrivateRoute>} />
+            <Route path="/insights" element={<PrivateRoute><TodayInsights /></PrivateRoute>} />
+            <Route path="/tracker" element={<PrivateRoute><Tracker /></PrivateRoute>} />
+            <Route path="/tracker/:id/tasks" element={<PrivateRoute><TrackerTasks /></PrivateRoute>} />
+            <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
+            <Route path="/settings/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route path="/settings/notification" element={<PrivateRoute><Notification /></PrivateRoute>} />
+            <Route path="/settings/password" element={<PrivateRoute><Password /></PrivateRoute>} />
+            <Route path="/settings/subscription" element={<PrivateRoute><Subscription /></PrivateRoute>} />
+          </Routes>
+        </Router>
+      </QuoteProvider>
     </AuthProvider>
   );
 }

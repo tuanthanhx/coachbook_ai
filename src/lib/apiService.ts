@@ -67,4 +67,13 @@ export const updatePassword = async (currentPassword: string, newPassword: strin
   }
 };
 
+export const getRandomQuote = async () => {
+  try {
+    const response = await apiService.get('/quotes/random');
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 export default apiService;
