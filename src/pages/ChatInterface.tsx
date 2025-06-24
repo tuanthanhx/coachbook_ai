@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import apiService from '@/lib/apiService';
 import Layout from '@/components/layouts/LayoutDefault';
@@ -20,16 +20,21 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const fetchChatHistory = async (id: string) => {
     try {
       const response = await apiService.get(`/chat/${id}`);
-      console.log('Chat history:', response.data);
       const formattedMessages = response.data.map((item: any) => ({
         type: item.sender === 'assistant' ? 'ai' : 'user',
         text: item.message,
       }));
       setMessages(formattedMessages);
+      scrollToBottom();
     } catch (error) {
       console.error('Error fetching chat history:', error);
     }
@@ -40,6 +45,10 @@ const ChatInterface = () => {
       fetchChatHistory(id);
     }
   }, [id]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -57,7 +66,7 @@ const ChatInterface = () => {
 
       setMessages((prev) => [
         ...prev,
-        { type: 'ai', text: response.data.reply },
+        { type: 'ai', text: response.data.assistantResponse },
       ]);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -90,7 +99,7 @@ const ChatInterface = () => {
               </div>
             </div>
           ))}
-          {!isTyping && (
+          {isTyping && (
             <div className="mb-4 flex justify-start">
               <div className="p-3 rounded-lg rounded-bl-none shadow-md max-w-xs bg-white text-left">
                 <div className="typing-dots">
@@ -101,6 +110,7 @@ const ChatInterface = () => {
               </div>
             </div>
           )}
+          <div ref={messagesEndRef}></div>
         </div>
 
         {/* Input Bar */}
@@ -125,6 +135,11 @@ const ChatInterface = () => {
                 placeholder="Type your message..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSend();
+                  }
+                }}
                 className="flex-1 h-11 p-4 rounded-full bg-gray-100"
               />
               <Button onClick={handleSend} disabled={!input.trim()} className="w-11 h-11 p-0 rounded-full bg-blue-500 text-white">
