@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { useEffect, useState } from 'react';
 import apiService from '@/lib/apiService';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface Chat {
   id: string;
@@ -19,10 +20,12 @@ const Chats = () => {
   const navigate = useNavigate();
   const [chats, setChats] = useState<Chat[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
+        setLoading(true);
         const response = await apiService.get('/books/following');
         const formattedChats: Chat[] = response.data.map((book: any) => ({
           id: book._id,
@@ -34,6 +37,8 @@ const Chats = () => {
         setChats(formattedChats);
       } catch (error) {
         console.error('Failed to fetch chats:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -71,22 +76,37 @@ const Chats = () => {
         <Button variant="default" size="lg" className="rounded-full font-bold">Recent</Button>
         <Button variant="outline" size="lg" className="rounded-full font-bold">Archived</Button>
       </div>
-      {/* Chats List */}
-      <div className="flex flex-col gap-8">
-        {filteredChats.map((chat, index) => (
-          <div key={index} className="flex justify-between items-center gap-4 cursor-pointer" onClick={() => navigate(`/chats/${chat.id}`)}>
-            <Avatar className="w-16 h-16">
-              <AvatarImage src={chat.image} alt={chat.title} />
-              <AvatarFallback>{chat.title.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              <h2 className="mb-1 font-bold">{chat.title}</h2>
-              <p className="w-[210px] text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{chat.message}</p>
+      {/* Skeleton */}
+      {loading ? (
+        <div className="flex flex-col gap-4">
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="flex justify-between items-center gap-4">
+              <Skeleton className="w-16 h-16 rounded-full" />
+              <div className="flex-1">
+                <Skeleton className="h-[1.5em] mb-1" />
+                <Skeleton className="h-[1em]" />
+              </div>
+              <Skeleton className="w-[50px] h-[1em]" />
             </div>
-            <div className="w-[80px] text-right text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{chat.updatedAt}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-8">
+          {filteredChats.map((chat, index) => (
+            <div key={index} className="flex justify-between items-center gap-4 cursor-pointer" onClick={() => navigate(`/chats/${chat.id}`)}>
+              <Avatar className="w-16 h-16">
+                <AvatarImage src={chat.image} alt={chat.title} />
+                <AvatarFallback>{chat.title.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <h2 className="mb-1 font-bold">{chat.title}</h2>
+                <p className="w-[210px] text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{chat.message}</p>
+              </div>
+              <div className="w-[80px] text-right text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{chat.updatedAt}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </Layout>
   );
 };

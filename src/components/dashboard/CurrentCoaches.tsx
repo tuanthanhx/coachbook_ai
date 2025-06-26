@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CoachItem from '@/components/dashboard/CoachItem';
 import apiService from '@/lib/apiService';
+import { Loader } from 'lucide-react';
 
 interface Coach {
   _id: string;
@@ -34,7 +35,9 @@ const CurrentCoaches: React.FC = () => {
     <div className="mt-8">
       <h2 className="text-xl font-bold mb-4">Current Coaches</h2>
       {loading ? (
-        <p className="p-5 bg-white rounded-lg shadow-md text-gray-600">Loading...</p>
+        <div className="flex justify-center items-center p-5">
+          <Loader className="animate-spin h-8 w-8" />
+        </div>
       ) : coaches.length === 0 ? (
         <p className="p-5 bg-white rounded-lg shadow-md text-gray-600">
           You are not following any coaches yet.<br />Start exploring and follow some to see them here!

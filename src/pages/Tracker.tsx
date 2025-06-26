@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import TrackerItem from '@/components/tracker/TrackerItem';
 import { useState, useEffect } from 'react';
 import apiService from '@/lib/apiService';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Coach = {
   _id: string;
@@ -24,15 +25,19 @@ const Tracker = () => {
   const [coaches, setCoaches] = useState<Coach[]>([]);
   const [filteredCoaches, setFilteredCoaches] = useState<Coach[]>([]);
   const [activeFilter, setActiveFilter] = useState<'all' | 'active' | 'done'>('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCoaches = async () => {
       try {
+        setLoading(true);
         const response = await apiService.get<Coach[]>('/books/following');
         setCoaches(response.data);
         setFilteredCoaches(response.data);
       } catch (error) {
         console.error('Error fetching coaches:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -109,27 +114,50 @@ const Tracker = () => {
         </Button>
       </div>
       {/* Coaches List */}
-      {filteredCoaches.length === 0 ? (
-        <p className="p-5 bg-white rounded-lg shadow-md text-gray-600">No coaches to display</p>
-      ) : (
+      {loading ? (
         <div className="flex flex-col gap-5">
-          {filteredCoaches.map((coach, index) => (
-            <TrackerItem
-              key={index}
-              id={coach._id}
-              image={coach.imageUrl}
-              title={coach.title}
-              author={coach.author}
-              description={coach.description}
-              tags={coach.tags}
-              progress={coach.progress}
-              totalTasksCount={coach.totalTasksCount}
-              completedTasksCount={coach.completedTasksCount}
-            />
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
+              <div className="flex">
+                <Skeleton className="w-16 h-24 mr-4" />
+                <div className="flex-1">
+                  <Skeleton className="h-[2em] mb-2" />
+                  <Skeleton className="h-[1em] mb-4" />
+                  <Skeleton className="h-[1em] mb-1" />
+                  <Skeleton className="h-[1em] mb-1" />
+                  <Skeleton className="h-[1em] mb-1" />
+                  <Skeleton className="h-[1em]" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <Skeleton className="h-[3em] mb-0.5" />
+                <Skeleton className="h-[3em]" />
+              </div>
+            </div>
           ))}
         </div>
+      ) : (
+        filteredCoaches.length === 0 ? (
+          <p className="p-5 bg-white rounded-lg shadow-md text-gray-600">No coaches to display</p>
+        ) : (
+          <div className="flex flex-col gap-5">
+            {filteredCoaches.map((coach, index) => (
+              <TrackerItem
+                key={index}
+                id={coach._id}
+                image={coach.imageUrl}
+                title={coach.title}
+                author={coach.author}
+                description={coach.description}
+                tags={coach.tags}
+                progress={coach.progress}
+                totalTasksCount={coach.totalTasksCount}
+                completedTasksCount={coach.completedTasksCount}
+              />
+            ))}
+          </div>
+        )
       )}
-
     </Layout>
   );
 };

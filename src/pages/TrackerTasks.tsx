@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Task {
   _id: string;
@@ -27,15 +28,19 @@ const Tracker = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTaskInstruction, setSelectedTaskInstruction] = useState<string | null>(null);
   const [bookTitle, setBookTitle] = useState<string>('');
+  const [loading, setLoading] = useState(true);
   const recentlyCompletedTaskRef = useRef<string | null>(null);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
+        setLoading(true);
         const response = await apiService.get<Task[]>(`/books/${id}/tasks`);
         setTasks(response.data);
       } catch (error) {
         console.error('Error fetching tasks:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -100,45 +105,63 @@ const Tracker = () => {
       </div>
 
       {/* List of Tasks */}
-      {tasks.map((task, index) => (
-        <div
-          key={index}
-          className={`rounded-lg shadow-md p-5 mb-5 ${recentlyCompletedTaskRef.current === task._id ? 'bg-blue-100' : 'bg-white'}`}
-        >
-          <h2 className="flex items-center font-bold mb-2">
-            {task.isCompleted && <CircleCheckBig className="w-7 h-7 mr-2 text-blue-500" />}
-            <span className="flex-1">{task.title}</span>
-          </h2>
-          <p className="text-gray-600">{task.description}</p>
-          <div className="flex flex-col gap-4 mt-4">
-            <div className="flex items-center justify-between gap-4">
-              <Button className="flex-1 button" onClick={(e) => {
-                e.stopPropagation();
-                setSelectedTaskInstruction(task.instruction);
-              }}>
-                <Info />
-                Open Instruction
-              </Button>
-              <Button className="flex-1 button" onClick={(e) => {
-                e.stopPropagation();
-                navigate('/chats/1');
-              }}>
-                <MessageCircle />
-                Ask Coach
-              </Button>
+      {loading ? (
+        <div className="flex flex-col gap-5">
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="rounded-lg shadow-md p-5 bg-white">
+              <Skeleton className="h-[1em] mb-4" />
+              <Skeleton className="h-[1em] mb-1" />
+              <Skeleton className="h-[1em] mb-1" />
+              <Skeleton className="h-[1em] mb-4" />
+              <div className="flex justify-between mb-4">
+                <Skeleton className="w-[48%] h-[3em]" />
+                <Skeleton className="w-[48%] h-[3em]" />
+              </div>
+              <Skeleton className="h-[3em]" />
             </div>
-            {!task.isCompleted && (
-              <Button className="w-full button-primary" onClick={(e) => {
-                e.stopPropagation();
-                handleMarkAsComplete(task._id);
-              }}>
-                <CircleCheckBig />
-                Mark as Complete
-              </Button>
-            )}
-          </div>
+          ))}
         </div>
-      ))}
+      ) : (
+        tasks.map((task, index) => (
+          <div
+            key={index}
+            className={`rounded-lg shadow-md p-5 mb-5 ${recentlyCompletedTaskRef.current === task._id ? 'bg-blue-100' : 'bg-white'}`}
+          >
+            <h2 className="flex items-center font-bold mb-2">
+              {task.isCompleted && <CircleCheckBig className="w-7 h-7 mr-2 text-blue-500" />}
+              <span className="flex-1">{task.title}</span>
+            </h2>
+            <p className="text-gray-600">{task.description}</p>
+            <div className="flex flex-col gap-4 mt-4">
+              <div className="flex items-center justify-between gap-4">
+                <Button className="flex-1 button" onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedTaskInstruction(task.instruction);
+                }}>
+                  <Info />
+                  Instruction
+                </Button>
+                <Button className="flex-1 button" onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/chats/1');
+                }}>
+                  <MessageCircle />
+                  Ask Coach
+                </Button>
+              </div>
+              {!task.isCompleted && (
+                <Button className="w-full button-primary" onClick={(e) => {
+                  e.stopPropagation();
+                  handleMarkAsComplete(task._id);
+                }}>
+                  <CircleCheckBig />
+                  Mark as Complete
+                </Button>
+              )}
+            </div>
+          </div>
+        ))
+      )}
 
       {/* Task Instruction Dialog */}
       <Dialog open={!!selectedTaskInstruction} onOpenChange={() => setSelectedTaskInstruction(null)}>
