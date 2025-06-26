@@ -4,7 +4,7 @@ import apiService from '@/lib/apiService';
 import Layout from '@/components/layouts/LayoutDefault';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ChevronLeft, EllipsisVertical, Send } from 'lucide-react';
+import { ChevronLeft, EllipsisVertical, Send, Pen } from 'lucide-react';
 // @ts-ignore
 import ReactMarkdown from 'react-markdown';
 import './ChatInterface.css';
@@ -54,7 +54,7 @@ const ChatInterface = () => {
     if (!input.trim()) return;
 
     const newMessage: Message = { type: 'user', text: input };
-    setMessages([...messages, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
     setInput('');
     setIsTyping(true);
 
@@ -64,16 +64,60 @@ const ChatInterface = () => {
         sender: 'user',
       });
 
-      setMessages((prev) => [
-        ...prev,
-        { type: 'ai', text: response.data.assistantResponse },
-      ]);
+      const assistantResponse = response.data.assistantResponse;
+      let streamingText = '';
+
+      setMessages((prev) => [...prev, { type: 'ai', text: '' }]);
+      setIsTyping(false);
+
+      for (let i = 0; i < assistantResponse.length; i++) {
+        streamingText += assistantResponse[i];
+        setMessages((prev) => {
+          const updatedMessages = [...prev];
+          updatedMessages[updatedMessages.length - 1] = {
+            type: 'ai',
+            text: streamingText,
+          };
+          return updatedMessages;
+        });
+        await new Promise((resolve) => setTimeout(resolve, 10));
+      }
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {
       setIsTyping(false);
     }
   };
+
+  const fadeInAnimation = `
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+  `;
+
+  const styleElement = document.createElement('style');
+  styleElement.textContent = fadeInAnimation;
+  document.head.appendChild(styleElement);
+
+  const TypingBubble = () => (
+    <div className="mb-4 flex justify-start">
+      <div className="p-3 rounded-lg rounded-bl-none shadow-md max-w-xs bg-white text-left">
+        <div className="flex items-center gap-2">
+          <Pen className="w-5 h-5 text-gray-500" />
+          <p className="text-sm text-gray-500">Typing...</p>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Layout>
@@ -85,7 +129,7 @@ const ChatInterface = () => {
           <EllipsisVertical className="bg-white rounded-full w-10 h-10 p-2.5 absolute top-1/2 -translate-y-1/2 right-0 cursor-pointer" />
         </div>
         {/* Message Thread View */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto pb-5">
           {messages.map((message, index) => (
             <div
               key={index}
@@ -99,17 +143,7 @@ const ChatInterface = () => {
               </div>
             </div>
           ))}
-          {isTyping && (
-            <div className="mb-4 flex justify-start">
-              <div className="p-3 rounded-lg rounded-bl-none shadow-md max-w-xs bg-white text-left">
-                <div className="typing-dots">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-              </div>
-            </div>
-          )}
+          {isTyping && <TypingBubble />}
           <div ref={messagesEndRef}></div>
         </div>
 
