@@ -4,6 +4,7 @@ import { ChevronLeft, PartyPopper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { getBookById } from '@/lib/apiService';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Book {
   _id: string;
@@ -21,6 +22,7 @@ const CoachProfile = () => {
   const { id } = useParams();
   const location = useLocation();
   const [book, setBook] = useState<Book | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -31,6 +33,8 @@ const CoachProfile = () => {
         }
       } catch (error) {
         console.error('Failed to fetch book:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -53,33 +57,50 @@ const CoachProfile = () => {
           <p className="text-center">You are now following this coach!</p>
         </div>
       )}
-      {/* Cover */}
-      {book && (
-        <div className="rounded-lg shadow-md py-10 px-5 mb-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
-          <div className="flex flex-col items-center">
-            <img className="w-30 h-45 rounded-lg mb-4 shadow-lg" src={book.imageUrl || '/assets/img/book_001.png'} alt="Coach" />
-            <h2 className="mb-2 text-white text-xl font-bold text-center">{book.title}</h2>
-            <p className="text-white text-sm">by {book.author}</p>
-          </div>
-        </div>
-      )}
-      {/* Style */}
-      {book && (
-        <div className="bg-white rounded-lg shadow-md p-5 mb-5">
-          <h2 className="font-bold text-lg mb-2">Coaching Style</h2>
-          <p>{book.coachingStyle}</p>
-        </div>
-      )}
-      {/* Principles */}
-      {book && (
-        <div className="bg-white rounded-lg shadow-md p-5">
-          <h2 className="font-bold text-lg mb-2">Core Principles</h2>
-          <ul className="list-disc pl-5">
-            {book.corePrinciples?.map((principle, index) => (
-              <li key={index}>{principle}</li>
-            ))}
-          </ul>
-        </div>
+      {/* Content */}
+      {loading ? (
+        <>
+          <Skeleton className="w-full h-[20em] mb-5 rounded-lg" />
+          <Skeleton className="w-full h-[2em] mb-1" />
+          <Skeleton className="w-full h-[1em] mb-1" />
+          <Skeleton className="w-full h-[1em] mb-1" />
+          <Skeleton className="w-full h-[1em] mb-5" />
+          <Skeleton className="w-full h-[2em] mb-1" />
+          <Skeleton className="w-full h-[1em] mb-1" />
+          <Skeleton className="w-full h-[1em] mb-1" />
+          <Skeleton className="w-full h-[1em] mb-1" />
+        </>
+      ) : (
+        <>
+          {/* Cover */}
+          {book && (
+            <div className="rounded-lg shadow-md py-10 px-5 mb-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
+              <div className="flex flex-col items-center">
+                <img className="w-30 h-45 rounded-lg mb-4 shadow-lg" src={book.imageUrl || '/assets/img/book_001.png'} alt="Coach" />
+                <h2 className="mb-2 text-white text-xl font-bold text-center">{book.title}</h2>
+                <p className="text-white text-sm">by {book.author}</p>
+              </div>
+            </div>
+          )}
+          {/* Style */}
+          {book && (
+            <div className="bg-white rounded-lg shadow-md p-5 mb-5">
+              <h2 className="font-bold text-lg mb-2">Coaching Style</h2>
+              <p>{book.coachingStyle}</p>
+            </div>
+          )}
+          {/* Principles */}
+          {book && (
+            <div className="bg-white rounded-lg shadow-md p-5">
+              <h2 className="font-bold text-lg mb-2">Core Principles</h2>
+              <ul className="list-disc pl-5">
+                {book.corePrinciples?.map((principle, index) => (
+                  <li key={index}>{principle}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
       )}
       {/* Progress */}
       {/* <div className="bg-white rounded-lg shadow-md p-5 mb-5">
