@@ -62,18 +62,20 @@ const DailyInsights: React.FC = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="flex justify-between items-center mt-4">
-            <MoveLeft className="cursor-pointer" onClick={() => { api?.scrollPrev() }} />
-            <div className="flex gap-2">
-              {[...Array(api?.scrollSnapList().length || 0)].map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-2 h-2 rounded-full ${index === selectedIndex ? 'bg-green-500' : 'bg-gray-300'}`}
-                />
-              ))}
+          {insights.length > 1 && (
+            <div className="flex justify-between items-center mt-4">
+              <MoveLeft className="cursor-pointer" onClick={() => { api?.scrollPrev() }} />
+              <div className="flex gap-2">
+                {[...Array(api?.scrollSnapList().length || 0)].map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full ${index === selectedIndex ? 'bg-green-500' : 'bg-gray-300'}`}
+                  />
+                ))}
+              </div>
+              <MoveRight className="cursor-pointer" onClick={() => { api?.scrollNext() }} />
             </div>
-            <MoveRight className="cursor-pointer" onClick={() => { api?.scrollNext() }} />
-          </div>
+          )}
         </Carousel>
       ) : (
         <div className="text-center text-gray-200">No insights available for today.</div>
