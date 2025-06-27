@@ -1,6 +1,6 @@
 import Layout from '@/components/layouts/LayoutDefault';
 import { useNavigate } from "react-router-dom";
-import { Calendar, ChevronLeft, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { CircleCheck, ChevronLeft, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import apiService from '@/lib/apiService';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -100,7 +100,7 @@ const CompletedInsights = () => {
                   )}
 
                   <p className="flex justify-start items-center mt-5 text-sm text-gray-500">
-                    <Calendar className="w-5 h-5 mr-2 -mt-0.5" />
+                    <CircleCheck className="w-5 h-5 mr-2 -mt-0.5" />
                     <span>{new Date(insight.updatedAt).toLocaleDateString()}</span>
                   </p>
                 </div>
