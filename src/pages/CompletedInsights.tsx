@@ -1,6 +1,6 @@
 import Layout from '@/components/layouts/LayoutDefault';
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { Calendar, ChevronLeft, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import apiService from '@/lib/apiService';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -46,10 +46,10 @@ const CompletedInsights = () => {
       </div>
       {loading ? (
         <div className="flex flex-col gap-5">
-          <Skeleton className="h-32 rounded-lg shadow-md" />
+          <Skeleton className="h-38 rounded-lg shadow-md" />
           {[...Array(3)].map((_, index) => (
-            <div key={index} className="rounded-lg shadow-md p-5 bg-white">
-              <Skeleton className="h-[2em] mb-2" />
+            <div key={index} className="rounded-lg shadow-md py-6 px-5 bg-white">
+              <Skeleton className="h-[1.5em] mb-1" />
               <Skeleton className="h-[1em] mb-4" />
               <Skeleton className="h-[1em] mb-1" />
               <Skeleton className="h-[1em] mb-1" />
@@ -67,7 +67,7 @@ const CompletedInsights = () => {
           </div>
         ) : (
           <>
-            <div className="rounded-lg shadow-md py-5 px-5 mb-5 text-center text-white bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
+            <div className="rounded-lg shadow-md py-6 px-5 mb-5 text-center text-white bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
               <div className="text-xl font-bold mb-2">Your Completed Insights</div>
               <div className="text-3xl font-bold mb-2">{insights.length}</div>
               <div>Total Completed</div>
@@ -77,26 +77,32 @@ const CompletedInsights = () => {
               <div key={insight._id} className="rounded-lg shadow-md p-5 mb-5 bg-white">
                 <div className="w-full">
                   <h2 className="text-xl font-bold">{insight.insightId.title}</h2>
-                  <p className="mb-4 text-sm text-gray-600">{insight.insightId.bookId.title} • {insight.insightId.bookId.author}</p>
+                  <p className="mb-4 text-sm text-gray-500">{insight.insightId.bookId.title} • {insight.insightId.bookId.author}</p>
                   <p>{insight.insightId.content}</p>
 
-                  <div className="bg-blue-100 p-4 rounded-lg mt-4">
-                    <h3 className="mb-2 font-bold">Your reflection</h3>
-                    <p className="italic">"{insight.comment}"</p>
+                  {(insight.comment || insight.isHelpful !== undefined) && (
+                    <div className="bg-blue-100 p-4 rounded-lg mt-4">
+                      <h3 className="mb-2 font-bold">Your reflection</h3>
+                      {insight.comment && <p className="italic">"{insight.comment}"</p>}
+                      {insight.isHelpful !== undefined && (
+                        <div className="flex items-center gap-2 mt-4">
+                          {insight.isHelpful ? (
+                            <ThumbsUp className="text-green-500" />
+                          ) : (
+                            <ThumbsDown className="text-red-500" />
+                          )}
+                          <span className="text-gray-600">
+                            {insight.isHelpful ? 'Helpful' : 'Not Helpful'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-                    {insight.isHelpful !== undefined && (
-                      <div className="flex items-center gap-2 mt-4">
-                        {insight.isHelpful ? (
-                          <ThumbsUp className="text-green-500" />
-                        ) : (
-                          <ThumbsDown className="text-red-500" />
-                        )}
-                        <span className="text-gray-600">
-                          {insight.isHelpful ? 'Helpful' : 'Not Helpful'}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  <p className="flex justify-start items-center mt-5 text-sm text-gray-500">
+                    <Calendar className="w-5 h-5 mr-2 -mt-0.5" />
+                    <span>{new Date(insight.updatedAt).toLocaleDateString()}</span>
+                  </p>
                 </div>
               </div>
             ))}

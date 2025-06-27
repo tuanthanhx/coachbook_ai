@@ -85,8 +85,8 @@ const TodayInsights = () => {
       {loading ? (
         <div className="flex flex-col gap-4">
           <>
-            <div className="rounded-lg shadow-md p-5 mb-5 bg-white">
-              <Skeleton className="h-[2em] mb-2" />
+            <div className="rounded-lg shadow-md py-6 px-5 mb-5 bg-white">
+              <Skeleton className="h-[1.5em] mb-1" />
               <Skeleton className="h-[1em] mb-4" />
               <Skeleton className="h-[1em] mb-1" />
               <Skeleton className="h-[1em] mb-1" />
@@ -120,7 +120,7 @@ const TodayInsights = () => {
                   <div className="rounded-lg shadow-md p-5 mb-5 bg-white">
                     <div className="w-full">
                       <h2 className="text-xl font-bold">{insight.title}</h2>
-                      <p className="mb-4 text-gray-600">{insight.bookTitle} • {insight.bookAuthor}</p>
+                      <p className="mb-4 text-gray-500">{insight.bookTitle} • {insight.bookAuthor}</p>
                       <p>{insight.content}</p>
                       {!slideStates[insight._id]?.completed ? (
                         <div className="bg-blue-100 p-5 rounded-lg mt-4">
@@ -140,23 +140,26 @@ const TodayInsights = () => {
                           />
                         </div>
                       ) : (
-                        <div className="bg-blue-100 p-4 rounded-lg mt-4">
-                          <h3 className="mb-2 font-bold">Your reflection</h3>
-                          <p className="italic">"{slideStates[insight._id]?.comment || ''}"</p>
-                          {/* show thumbup or down */}
-                          {slideStates[insight._id]?.isHelpful !== undefined && (
-                            <div className="flex items-center gap-2 mt-4">
-                              {slideStates[insight._id]?.isHelpful ? (
-                                <ThumbsUp className="text-green-500" />
-                              ) : (
-                                <ThumbsDown className="text-red-500" />
+                        <>
+                          {(slideStates[insight._id]?.comment || slideStates[insight._id]?.isHelpful !== undefined) && (
+                            <div className="bg-blue-100 p-4 rounded-lg mt-4">
+                              <h3 className="mb-2 font-bold">Your reflection</h3>
+                              {slideStates[insight._id]?.comment && <p className="italic">"{slideStates[insight._id]?.comment}"</p>}
+                              {slideStates[insight._id]?.isHelpful !== undefined && (
+                                <div className="flex items-center gap-2 mt-4">
+                                  {slideStates[insight._id]?.isHelpful ? (
+                                    <ThumbsUp className="text-green-500" />
+                                  ) : (
+                                    <ThumbsDown className="text-red-500" />
+                                  )}
+                                  <span className="text-gray-600">
+                                    {slideStates[insight._id]?.isHelpful ? 'Helpful' : 'Not Helpful'}
+                                  </span>
+                                </div>
                               )}
-                              <span className="text-gray-600">
-                                {slideStates[insight._id]?.isHelpful ? 'Helpful' : 'Not Helpful'}
-                              </span>
                             </div>
                           )}
-                        </div>
+                        </>
                       )}
                     </div>
                   </div>
@@ -164,7 +167,6 @@ const TodayInsights = () => {
                     <>
                       <div className="rounded-lg shadow-md p-5 mb-5 bg-white">
                         <h2 className="font-bold text-lg mb-2">How was this insight?</h2>
-                        {/* Show 2 buttons: Helpful / Not helpful with thumb up / down icon */}
                         <div className="flex justify-between gap-3">
                           <Button
                             variant="outline"
