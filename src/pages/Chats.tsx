@@ -32,7 +32,7 @@ const Chats = () => {
           id: book._id,
           image: book.imageUrl || '/assets/img/book_001.png',
           title: book.title,
-          message: book.latestChatMessage || `Chat with ${book.title} Coach`,
+          message: book.latestChatMessage || `Chat with ${book.title}`,
           latestChatTime: formatRelativeTime(book.latestChatTime),
         }));
         setChats(formattedChats);
