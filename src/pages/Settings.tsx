@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 
 
 const Settings = () => {

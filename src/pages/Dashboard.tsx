@@ -5,7 +5,7 @@ import Statistics from '@/components/dashboard/Statistics';
 import Discover from '@/components/dashboard/Discover';
 import CurrentCoaches from '@/components/dashboard/CurrentCoaches';
 import DailyInsights from '@/components/dashboard/DailyInsights';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 
 const Dashboard = () => {
   const { user } = useAuth();

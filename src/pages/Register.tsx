@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { toast } from "sonner";
 import { useState } from 'react';
 import { register } from '@/lib/apiService';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 
 const Register = () => {
   const [email, setEmail] = useState('');

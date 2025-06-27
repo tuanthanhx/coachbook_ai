@@ -19,6 +19,28 @@ apiService.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
+apiService.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      const storedRefreshToken = localStorage.getItem('refreshToken');
+      if (storedRefreshToken) {
+        try {
+          const newToken = await refreshToken(storedRefreshToken);
+          error.config.headers.Authorization = `Bearer ${newToken}`;
+          return apiService.request(error.config);
+        } catch (refreshError) {
+          console.error('Failed to refresh token:', refreshError);
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+          window.location.href = '/login';
+        }
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 const handleApiError = (error: any) => {
   const err = error as any;
   throw err.response?.data?.message || err.response?.data || err.message;
@@ -80,6 +102,21 @@ export const getBookById = async (id: string) => {
   try {
     const response = await apiService.get(`/books/${id}`);
     return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+export const refreshToken = async (refreshToken: string) => {
+  try {
+    const response = await apiService.post('/auth/refresh-token', { refreshToken });
+    const newToken = response.data.token;
+
+    // Update the Authorization header with the new token
+    localStorage.setItem('token', newToken);
+    apiService.defaults.headers.Authorization = `Bearer ${newToken}`;
+
+    return newToken;
   } catch (error) {
     handleApiError(error);
   }
