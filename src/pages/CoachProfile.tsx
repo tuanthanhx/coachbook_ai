@@ -1,7 +1,7 @@
 import Layout from '@/components/layouts/LayoutDefault';
-import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft } from 'lucide-react';
-// import { Button } from '@/components/ui/button';
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { ChevronLeft, PartyPopper } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { getBookById } from '@/lib/apiService';
 
@@ -19,6 +19,7 @@ interface Book {
 const CoachProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const location = useLocation();
   const [book, setBook] = useState<Book | null>(null);
 
   useEffect(() => {
@@ -36,6 +37,8 @@ const CoachProfile = () => {
     fetchBook();
   }, [id]);
 
+  const showSubscribedMessage = new URLSearchParams(location.search).get('subscribed') === 'true';
+
   return (
     <Layout>
       {/* Header */}
@@ -43,12 +46,19 @@ const CoachProfile = () => {
         <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
         <h1 className="px-8 w-full text-center text-xl font-bold">Coach Profile</h1>
       </div>
+      {/* Subscribed Message */}
+      {showSubscribedMessage && (
+        <div className="bg-blue-500 text-white shadow-md py-8 px-4 rounded-lg mb-5">
+          <PartyPopper className="w-8 h-8 mx-auto mb-4" />
+          <p className="text-center">You are now following this coach!</p>
+        </div>
+      )}
       {/* Cover */}
       {book && (
         <div className="rounded-lg shadow-md py-10 px-5 mb-5 bg-gradient-to-r from-[#2564ea] to-[#16a14b]">
           <div className="flex flex-col items-center">
             <img className="w-30 h-45 rounded-lg mb-4 shadow-lg" src={book.imageUrl || '/assets/img/book_001.png'} alt="Coach" />
-            <h2 className="mb-2 text-white text-xl font-bold">{book.title}</h2>
+            <h2 className="mb-2 text-white text-xl font-bold text-center">{book.title}</h2>
             <p className="text-white text-sm">by {book.author}</p>
           </div>
         </div>
@@ -62,7 +72,7 @@ const CoachProfile = () => {
       )}
       {/* Principles */}
       {book && (
-        <div className="bg-white rounded-lg shadow-md p-5 mb-5">
+        <div className="bg-white rounded-lg shadow-md p-5">
           <h2 className="font-bold text-lg mb-2">Core Principles</h2>
           <ul className="list-disc pl-5">
             {book.corePrinciples?.map((principle, index) => (
@@ -95,14 +105,16 @@ const CoachProfile = () => {
         </div>
       </div> */}
       {/* Buttons */}
-      {/* <div className="flex flex-col gap-4">
-        <Button className="w-full button-primary" onClick={() => navigate(`/chats/${book?._id}`)}>
-          Start Coaching
-        </Button>
-        <Button className="w-full button" onClick={() => navigate('/insights/completed')}>
-          View Completed Insights
-        </Button>
-      </div> */}
+      { showSubscribedMessage && (
+        <div className="flex flex-col gap-4 mt-5">
+          <Button className="w-full button-primary" onClick={() => navigate(`/chats/${book?._id}`)}>
+            Start Chatting
+          </Button>
+          <Button className="w-full button" onClick={() => navigate(`/tracker/${book?._id}/tasks`)}>
+            View Tasks
+          </Button>
+        </div>
+      )}
     </Layout>
   );
 };

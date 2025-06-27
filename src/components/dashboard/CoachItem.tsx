@@ -21,8 +21,7 @@ const CoachItem: React.FC<CoachItemProps> = ({ id, imageUrl, title, author, desc
   const handleStartCoaching = async (id: string) => {
     try {
       await apiService.post(`/books/${id}/follow`);
-      navigate('/');
-      // navigate(`/chats/${id}`);
+      navigate(`/coaches/${id}?subscribed=true`);
     } catch (error) {
       console.error('Failed to start coaching:', error);
       toast.error('Failed to start coaching. Please try again later.');

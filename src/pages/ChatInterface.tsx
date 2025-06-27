@@ -137,7 +137,7 @@ const ChatInterface = () => {
         <div className="fixed top-0 left-0 right-0 z-1000 w-full bg-gradient-to-r from-[#2564ea] to-[#16a14b] shadow-md px-5">
           <div className="flex items-center py-8 p-4 relative">
             <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
-            <h1 className="px-8 w-full min-h-7 text-center text-xl text-white font-bold">{bookInfo?.title}</h1>
+            <h1 className="px-8 w-full min-h-7 text-center text-xl text-white font-bold truncate">{bookInfo?.title}</h1>
             <EllipsisVertical className="bg-white rounded-full w-10 h-10 p-2.5 absolute top-1/2 -translate-y-1/2 right-0 cursor-pointer" />
           </div>
         </div>
@@ -167,7 +167,7 @@ const ChatInterface = () => {
             {!messages.length && (
               <div className="w-full max-w-[430px] px-5 py-2 overflow-hidden flex gap-2 no-scrollbar" style={{ overflowX: 'auto' }}>
                 {[
-                  'What is the summary?', 'Give me advice', 'How to start?',
+                  'Hello', 'What is the summary?', 'Give me advice', 'How to start?',
                   'Tell me more', 'What are the next steps?', 'Give me an example',
                 ].map((prompt, index) => (
                   <Button
