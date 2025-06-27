@@ -219,7 +219,7 @@ const TodayInsights = () => {
               </CarouselContent>
             </Carousel>
             {insights.length > 1 && (
-              <div className="flex justify-between items-center mt-4 p-5 bg-white rounded-lg shadow-md fixed w-full bottom-25" style={{ maxWidth: 'calc(100vw - 2.5rem' }}>
+              <div className="flex justify-between items-center max-w-[390px] mt-4 p-5 bg-white rounded-lg shadow-md fixed w-full bottom-25" style={{ width: 'calc(100vw - 2.5rem' }}>
                 <MoveLeft className="cursor-pointer" onClick={() => { api?.scrollPrev() }} />
                 <div className="flex gap-2">
                   {[...Array(api?.scrollSnapList().length || 0)].map((_, index) => (

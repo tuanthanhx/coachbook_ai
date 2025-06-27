@@ -20,6 +20,7 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [bookInfo, setBookInfo] = useState<{ title: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -41,8 +42,18 @@ const ChatInterface = () => {
   };
 
   useEffect(() => {
+    const fetchBookInfo = async (id: string) => {
+      try {
+        const response = await apiService.get(`/books/${id}`);
+        setBookInfo(response.data);
+      } catch (error) {
+        console.error('Error fetching book information:', error);
+      }
+    };
+
     if (id) {
       fetchChatHistory(id);
+      fetchBookInfo(id);
     }
   }, [id]);
 
@@ -123,10 +134,10 @@ const ChatInterface = () => {
     <Layout>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="fixed top-0 left-0 right-0 z-1000 w-full bg-gray-500 shadow-md px-5">
+        <div className="fixed top-0 left-0 right-0 z-1000 w-full bg-gradient-to-r from-[#2564ea] to-[#16a14b] shadow-md px-5">
           <div className="flex items-center py-8 p-4 relative">
             <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
-            <h1 className="px-8 w-full text-center text-xl text-white font-bold">Atomic Habits Coach</h1>
+            <h1 className="px-8 w-full min-h-7 text-center text-xl text-white font-bold">{bookInfo?.title}</h1>
             <EllipsisVertical className="bg-white rounded-full w-10 h-10 p-2.5 absolute top-1/2 -translate-y-1/2 right-0 cursor-pointer" />
           </div>
         </div>
@@ -139,7 +150,7 @@ const ChatInterface = () => {
               className={`mb-10 flex ${message.type === 'ai' ? 'justify-start' : 'justify-end'}`}
             >
               <div
-                className={`p-4 rounded-lg shadow-md max-w-xs ${message.type === 'ai' ? 'bg-white rounded-bl-none text-left' : 'bg-gradient-to-r from-[#2564ea] to-[#16a14b] rounded-br-none text-white text-right'
+                className={`p-4 rounded-lg shadow-md max-w-xs ${message.type === 'ai' ? 'bg-gray-50 rounded-bl-none text-left' : 'bg-blue-500 rounded-br-none text-white text-right'
                   }`}
               >
                 <ReactMarkdown>{message.text}</ReactMarkdown>
@@ -152,7 +163,7 @@ const ChatInterface = () => {
 
         {/* Input Bar */}
         <div className="fixed bottom-0 left-0 right-0">
-          <div className="w-[430px] mx-auto">
+          <div className="max-w-[430px] mx-auto">
             {!messages.length && (
               <div className="w-full max-w-[430px] px-5 py-2 overflow-hidden flex gap-2 no-scrollbar" style={{ overflowX: 'auto' }}>
                 {[

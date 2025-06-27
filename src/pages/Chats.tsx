@@ -7,13 +7,14 @@ import { useEffect, useState } from 'react';
 import apiService from '@/lib/apiService';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton"
+import { formatRelativeTime } from '@/lib/utils';
 
 interface Chat {
   id: string;
   image: string;
   title: string;
   message: string;
-  updatedAt: string;
+  latestChatTime?: string;
 }
 
 const Chats = () => {
@@ -31,8 +32,8 @@ const Chats = () => {
           id: book._id,
           image: book.imageUrl || '/assets/img/book_001.png',
           title: book.title,
-          message: `Chat with ${book.title} Coach`,
-          updatedAt: 'Recently',
+          message: book.latestChatMessage || `Chat with ${book.title} Coach`,
+          latestChatTime: formatRelativeTime(book.latestChatTime),
         }));
         setChats(formattedChats);
       } catch (error) {
@@ -78,7 +79,7 @@ const Chats = () => {
       </div>
       {/* Skeleton */}
       {loading ? (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-8">
           {[...Array(6)].map((_, index) => (
             <div key={index} className="flex justify-between items-center gap-4">
               <Skeleton className="w-16 h-16 rounded-full" />
@@ -100,9 +101,9 @@ const Chats = () => {
               </Avatar>
               <div className="flex-1">
                 <h2 className="mb-1 font-bold">{chat.title}</h2>
-                <p className="w-[210px] text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{chat.message}</p>
+                <p className="text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap max-w-[220px]" style={{ width: 'calc(100vw - 210px)' }}>{chat.message}</p>
               </div>
-              <div className="w-[80px] text-right text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{chat.updatedAt}</div>
+              <div className="w-[80px] text-right text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{chat.latestChatTime}</div>
             </div>
           ))}
         </div>
