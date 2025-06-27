@@ -18,12 +18,14 @@ import Notification from '@/pages/settings/Notification';
 import Password from '@/pages/settings/Password';
 import Subscription from '@/pages/settings/Subscription';
 import PrivateRoute from '@/components/PrivateRoute';
+import ScrollToTop from '@/components/ScrollToTop';
 
 function App() {
   return (
     <AuthProvider>
       <QuoteProvider>
         <Router>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path="/login" element={<Login />} />

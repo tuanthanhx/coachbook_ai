@@ -4,6 +4,7 @@ import { ChevronLeft } from 'lucide-react';
 import CoachItem from '@/components/dashboard/CoachItem';
 import { useState, useEffect } from 'react';
 import apiService from '@/lib/apiService';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Coach = {
   _id: string;
@@ -23,15 +24,19 @@ const Coaches = () => {
   const [filteredCoaches, setFilteredCoaches] = useState<Coach[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCoaches = async () => {
       try {
+        setLoading(true);
         const response = await apiService.get<Coach[]>('/books');
         setCoaches(response.data);
         setFilteredCoaches(response.data);
       } catch (error) {
         console.error('Error fetching coaches:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -105,21 +110,46 @@ const Coaches = () => {
       </div>
 
       {/* Coaches List */}
-      <div className="flex flex-col gap-5">
-        {filteredCoaches.map((coach, index) => (
-          <CoachItem
-            key={index}
-            id={coach._id}
-            imageUrl={coach.imageUrl}
-            title={coach.title}
-            author={coach.author}
-            description={coach.description}
-            tags={coach.tags}
-            progress={coach.progress || 0}
-            isSubscribed={coach.isSubscribed || false}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex flex-col gap-5">
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
+              <div className="flex">
+                <Skeleton className="w-16 h-24 mr-4 rounded-md" />
+                <div className="flex-1">
+                  <Skeleton className="h-[1.5em] mb-1" />
+                  <Skeleton className="h-[1em] mb-4" />
+                  <Skeleton className="h-[1em] mb-1" />
+                  <Skeleton className="h-[1em] mb-1" />
+                  <Skeleton className="h-[1em] mb-1" />
+                  <Skeleton className="h-[1em] mb-4" />
+                  <Skeleton className="h-[1.5em]" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <Skeleton className="h-[2.6em] mb-0.5" />
+                <Skeleton className="h-[2.6em]" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-5">
+          {filteredCoaches.map((coach, index) => (
+            <CoachItem
+              key={index}
+              id={coach._id}
+              imageUrl={coach.imageUrl}
+              title={coach.title}
+              author={coach.author}
+              description={coach.description}
+              tags={coach.tags}
+              progress={coach.progress || 0}
+              isSubscribed={coach.isSubscribed || false}
+            />
+          ))}
+        </div>
+      )}
     </Layout>
   );
 };

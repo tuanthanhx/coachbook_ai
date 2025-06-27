@@ -119,19 +119,20 @@ const Tracker = () => {
           {[...Array(3)].map((_, index) => (
             <div key={index} className="flex flex-col gap-5 p-5 shadow-xl rounded-lg bg-white">
               <div className="flex">
-                <Skeleton className="w-16 h-24 mr-4" />
+                <Skeleton className="w-16 h-24 mr-4 rounded-md" />
                 <div className="flex-1">
-                  <Skeleton className="h-[2em] mb-2" />
+                  <Skeleton className="h-[1.5em] mb-1" />
                   <Skeleton className="h-[1em] mb-4" />
                   <Skeleton className="h-[1em] mb-1" />
                   <Skeleton className="h-[1em] mb-1" />
                   <Skeleton className="h-[1em] mb-1" />
-                  <Skeleton className="h-[1em]" />
+                  <Skeleton className="h-[1em] mb-4" />
+                  <Skeleton className="h-[1.5em]" />
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <Skeleton className="h-[3em] mb-0.5" />
-                <Skeleton className="h-[3em]" />
+                <Skeleton className="h-[2.6em] mb-0.5" />
+                <Skeleton className="h-[2.6em]" />
               </div>
             </div>
           ))}

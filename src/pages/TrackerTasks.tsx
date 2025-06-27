@@ -22,7 +22,7 @@ interface Task {
   isCompleted: boolean;
 }
 
-const Tracker = () => {
+const TrackerTasks = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -109,13 +109,13 @@ const Tracker = () => {
         <div className="flex flex-col gap-5">
           {[...Array(3)].map((_, index) => (
             <div key={index} className="rounded-lg shadow-md p-5 bg-white">
-              <Skeleton className="h-[1em] mb-4" />
+              <Skeleton className="h-[1.9em] mb-4" />
               <Skeleton className="h-[1em] mb-1" />
               <Skeleton className="h-[1em] mb-1" />
               <Skeleton className="h-[1em] mb-4" />
               <div className="flex justify-between mb-4">
-                <Skeleton className="w-[48%] h-[3em]" />
-                <Skeleton className="w-[48%] h-[3em]" />
+                <Skeleton className="w-[48%] h-[2.6em]" />
+                <Skeleton className="w-[48%] h-[2.6em]" />
               </div>
               <Skeleton className="h-[3em]" />
             </div>
@@ -143,7 +143,7 @@ const Tracker = () => {
                 </Button>
                 <Button className="flex-1 button" onClick={(e) => {
                   e.stopPropagation();
-                  navigate('/chats/1');
+                  navigate(`/chats/${id}`);
                 }}>
                   <MessageCircle />
                   Ask Coach
@@ -178,4 +178,4 @@ const Tracker = () => {
   );
 };
 
-export default Tracker;
+export default TrackerTasks;
