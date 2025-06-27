@@ -123,13 +123,16 @@ const ChatInterface = () => {
     <Layout>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="flex items-center py-8 p-4 relative">
-          <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
-          <h1 className="px-8 w-full text-center text-xl font-bold">Atomic Habits Coach</h1>
-          <EllipsisVertical className="bg-white rounded-full w-10 h-10 p-2.5 absolute top-1/2 -translate-y-1/2 right-0 cursor-pointer" />
+        <div className="fixed top-0 left-0 right-0 z-1000 w-full bg-gray-500 shadow-md px-5">
+          <div className="flex items-center py-8 p-4 relative">
+            <ChevronLeft className="bg-white rounded-full w-10 h-10 p-1 absolute top-1/2 -translate-y-1/2 left-0 cursor-pointer" onClick={() => navigate(-1)} />
+            <h1 className="px-8 w-full text-center text-xl text-white font-bold">Atomic Habits Coach</h1>
+            <EllipsisVertical className="bg-white rounded-full w-10 h-10 p-2.5 absolute top-1/2 -translate-y-1/2 right-0 cursor-pointer" />
+          </div>
         </div>
+
         {/* Message Thread View */}
-        <div className="flex-1 overflow-y-auto pb-5">
+        <div className="flex-1 overflow-y-auto pt-28">
           {messages.map((message, index) => (
             <div
               key={index}
@@ -150,21 +153,23 @@ const ChatInterface = () => {
         {/* Input Bar */}
         <div className="fixed bottom-0 left-0 right-0">
           <div className="w-[430px] mx-auto">
-            <div className="w-full max-w-[430px] px-5 py-2 overflow-hidden flex gap-2 no-scrollbar" style={{ overflowX: 'auto' }}>
-              {[
-                'What is the summary?', 'Give me advice', 'How to start?',
-                'Tell me more', 'What are the next steps?', 'Give me an example',
-              ].map((prompt, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  onClick={() => setInput(prompt)}
-                  className="text-sm shadow-md"
-                >
-                  {prompt}
-                </Button>
-              ))}
-            </div>
+            {!messages.length && (
+              <div className="w-full max-w-[430px] px-5 py-2 overflow-hidden flex gap-2 no-scrollbar" style={{ overflowX: 'auto' }}>
+                {[
+                  'What is the summary?', 'Give me advice', 'How to start?',
+                  'Tell me more', 'What are the next steps?', 'Give me an example',
+                ].map((prompt, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    onClick={() => setInput(prompt)}
+                    className="text-sm shadow-md"
+                  >
+                    {prompt}
+                  </Button>
+                ))}
+              </div>
+            )}
 
             <div className="px-5 py-4 bg-white shadow-md flex items-center gap-2">
               <Input
