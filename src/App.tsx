@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
 import { QuoteProvider } from '@/context/QuoteContext';
+import PrivateRoute from '@/components/PrivateRoute';
+import ScrollToTop from '@/components/ScrollToTop';
 import Dashboard from '@/pages/Dashboard';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
@@ -17,8 +19,6 @@ import Profile from '@/pages/settings/Profile';
 import Notification from '@/pages/settings/Notification';
 import Password from '@/pages/settings/Password';
 import Subscription from '@/pages/settings/Subscription';
-import PrivateRoute from '@/components/PrivateRoute';
-import ScrollToTop from '@/components/ScrollToTop';
 
 function App() {
   return (
